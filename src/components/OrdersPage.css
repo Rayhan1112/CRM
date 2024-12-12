@@ -1,0 +1,124 @@
+/* OrdersPage.css */
+
+/* Grid layout for the summary section */
+
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 20px; /* Gap between grid items */
+    margin: 20px 0; /* Margin for spacing */
+    padding: 20px; /* Padding inside the grid container */
+    background-color: #f4f4f4; /* Light background for the grid */
+    border-radius: 8px; /* Rounded corners for a softer look */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  }
+    .summary-item {
+      border: 1px solid #ccc; /* Border for each item */
+      padding: 15px; /* Padding inside items */
+      text-align: center; /* Center align text */
+      border-radius: 5px; /* Rounded corners */
+      background-color: #f9f9f9; /* Light background */
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for mobile */
+        grid-template-rows: repeat(2, auto); /* 2 rows for mobile */
+      }
+    }
+  
+  
+    
+    .summary-icon {
+      color: #333;
+      margin-bottom: 10px; /* Adds space between icon and heading */
+    }
+    
+    .summary-item h4 {
+      margin: 0;
+      font-size: 1.1em;
+      color: #333;
+    }
+    
+    .summary-item p {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #333;
+      margin: 5px 0 0;
+    }
+    
+    
+    /* Styling for the Order Table */
+    table {
+      width: 100%;
+      border-collapse: collapse; /* Remove double borders */
+      margin-top: 20px;
+      padding: 4px;
+    }
+    
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border: 1px solid #ddd; /* Adds border to each cell */
+    }
+    
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f9f9f9; /* Adds alternating row colors for better readability */
+    }
+    
+    table, th, td {
+      border: 1px solid #ddd; /* Adds border to table, header, and data cells */
+      border-radius: 5px;
+    }
+  
+  /* SampleOrderspage.css */
+  
+  /* General styles for the table container */
+  .table-container {
+      margin-top: 20px; /* Space above the table or slider */
+  }
+  
+  /* Hide the desktop view on mobile */
+  .mobile-view {
+      display: none; /* Default to hidden */
+  }
+  
+  /* Styles for desktop view */
+  .desktop-view {
+      display: block; /* Show on larger screens */
+  }
+  
+  /* Slider styles for mobile view */
+  .slider {
+      display: flex;
+      overflow-x: auto; /* Horizontal scroll */
+      gap: 15px; /* Space between items */
+  }
+  
+  /* Each item in the slider */
+  .slider-item {
+      min-width: 300px; /* Minimum width for each slider item */
+      border: 1px solid #ccc; /* Border for each slider item */
+      padding: 15px; /* Padding inside each item */
+      border-radius: 5px; /* Rounded corners */
+      background-color: #f9f9f9; /* Light background */
+  }
+  
+  /* Responsive rules */
+  @media (max-width: 768px) {
+      .desktop-view {
+          display: none; /* Hide desktop view on small screens */
+      }
+      .mobile-view {
+          display: block; /* Show mobile view */
+      }
+  }
+  
+  
+    

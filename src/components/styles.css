@@ -1,0 +1,59 @@
+.container {
+    margin: 20px auto;
+    font-family: "cursive";
+    font-weight: 900;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  thead th {
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  thead .btn-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  thead .btn {
+    font-size: 14px;
+    padding: 5px 10px;
+    margin: 5px;
+  }
+  
+  tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #e9ecef;
+  }
+  
+  tbody td {
+    text-align: center;
+    padding: 10px;
+  }
+  
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #dee2e6;
+    padding: 8px;
+    text-align: center;
+  }
+  
+  button {
+    cursor: pointer;
+  }
+  
