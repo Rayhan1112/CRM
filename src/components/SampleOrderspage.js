@@ -82,9 +82,7 @@ function ItemList() {
 
   return (
     <div className="container my-4">
-      <h2 className="mb-4" style={{ fontFamily: "lucida sans" }}>
-        ALL VISITED PERSONS & THEIR DETAILS
-      </h2>
+    
 
       <SummaryOrders
         interested={leadCounts.interested}

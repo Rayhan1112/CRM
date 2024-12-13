@@ -1,17 +1,162 @@
+/* Header Styling */
 .header {
-  position: sticky;
-  top: 0;
-  width: 100%;
-  background-color: rgb(122, 114, 114);
-  color: white;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  z-index: 1000; /* Ensure it's above other content */
+  padding: 0px 30px; 
+  background-color: rgb(122, 114, 114); 
+  color: #f7f4f4; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  position: sticky; 
+  top: 0;
+  z-index: 1000; 
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Optional: Add a subtle shadow for visual effect */
-.header {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+/* Logo Styling */
+.logo {
+  font-size: 12px; 
+  font-weight: bold;
+  color: #f3ebeb; 
+  letter-spacing: 1px; 
+  text-transform: uppercase; 
+}
+
+/* Header Actions Container */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px; 
+  border-left: 1px solid rgba(255, 255, 255, 0.3);
+  padding-left: 70px; 
+}
+
+/* Search Bar Styling */
+.search-bar {
+  width: 100%;
+  padding: 8px 5px; 
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px; 
+  transition: border-color 0.3s ease;
+  background-color: white; 
+  text-align:left;  
+}
+
+/* Icon Styling */
+.icon {
+  font-size: 80px;
+  color:white;
+  cursor: pointer;
+  margin-left: 25px; 
+  transition: color 0.3s ease;
+  padding-right: 15px; 
+}
+
+.icon:hover {
+  color:black; 
+}
+
+/* Plus Icon Styling */
+.plus-icon {
+  font-size: 50px; 
+  color: white;
+  cursor: pointer;
+  margin-left: 25px;
+  transition: color 0.3s ease;
+}
+.plus-icon:hover {
+  color:black
+}
+
+/* Upgrade Button Styling */
+.upgrade-btn {
+  padding: 8px 20px;
+  background-color: #f1f7f1; 
+  border: none;
+  border-radius: 4px;
+  color:black; 
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.upgrade-btn:hover {
+  background-color: #45a049; 
+}
+.copilot-btn {
+  padding: 8px 20px;
+  background-color: #f1f7f1; 
+  border: none;
+  border-radius: 4px;
+  color:black; 
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.copilot-btn:hover {
+  background-color: #45a049; 
+}
+
+/* Profile Icon Styling */
+.profile-icon {
+  background-color: #f3f3f3; 
+  padding: 10px; 
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease; 
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.profile-icon:hover {
+  background-color:rgb(101, 221, 101); 
+  transform: scale(1.1); 
+}
+
+.profile-icon:active {
+  transform: scale(1); 
+}
+
+
+.profile-icon svg {
+  font-size: 40px; 
+}
+
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+
+  .header-actions {
+    justify-content: center;
+    gap: 10px;
+    padding-left: 0; 
+    border-left: none; 
+  }
+
+  .search-bar-container {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .plus-icon {
+    font-size: 100px;
+  }
+
+  
+  .icon {
+    font-size: 100px; 
+  }
 }

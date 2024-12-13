@@ -239,239 +239,250 @@ function ItemForm({ onAddItem }) {
   // };
   
   const formStyle = {
-    fontFamily:"Times New Roman",
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'stretch', // Align all child elements to stretch to full width
-    gap: '20px',
-    maxWidth: '600px',
-    padding: '10px',
-    backgroundColor: '#f9f9f1',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.9)',
-   // margin: '0 auto', // Center the form horizontally
+    fontFamily: "Times New Roman, serif",
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+    maxWidth: "700px",
+    padding: "20px",
+    backgroundColor: "#f9f9f1",
+    borderRadius: "12px",
+    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
   };
   
   const formRowStyle = {
-    fontFamily:"Times New Roman",
-    display: 'flex',
-    flexDirection: 'column', // Stack label and input vertically
-    width: '100%',
-    gap: '10px',
+    display: "flex",
+    flexDirection: "column",
+    width: "100%",
+    gap: "10px",
+  };
+  
+  const formRowDoubleStyle = {
+    display: "flex",
+    flexDirection: "row",
+    gap: "20px",
+    width: "100%",
+  };
+  
+  const inputWrapperStyle = {
+    flex: 1, // Ensures each input takes up equal space
+    display: "flex",
+    flexDirection: "column",
   };
   
   const labelStyle = {
-    fontFamily:"Times New Roman",
-    // marginTop:"10px",
-    fontSize: '13px', // Consistent font size
-    fontWeight: '500',
-    textAlign: 'left', // Align text to the left
-    width: '100%',
-   
-    
+    fontSize: "14px",
+    fontWeight: "600",
+    textAlign: "left",
+    color: "#333",
   };
   
   const inputStyle = {
-    fontFamily:"Times New Roman",
-    padding: '10px',
-    border: '1px solid #ddd',
-    borderRadius: '10px',
-    fontSize: '13px', // Match label font size
-    outline: 'none',
-    width: '100%', // Ensure full width
+    padding: "12px",
+    border: "1px solid #ccc",
+    borderRadius: "8px",
+    fontSize: "14px",
+    outline: "none",
+    transition: "border-color 0.3s, box-shadow 0.3s",
+    width: "100%",
+  };
+  
+  const inputFocusStyle = {
+    borderColor: "#007bff",
+    boxShadow: "0 0 5px rgba(0, 123, 255, 0.5)",
   };
   
   const selectStyle = {
-    ...inputStyle, // Inherit the same style as input
+    ...inputStyle,
   };
   
   const buttonStyle = {
-    fontFamily:"Times New Roman",
-   // marginTop:"10px",
-    padding: '12px 20px',
-    backgroundColor: '#007bff',
-    color: 'white',
-    border: 'none',
-    borderRadius: '4px',
-    fontSize: '16px',
-    cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
-    width: '100%', // Full width button
+    padding: "12px 20px",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    fontSize: "16px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "background-color 0.3s, transform 0.2s",
+    width: "100%",
   };
   
   const buttonHoverStyle = {
-    backgroundColor: '#0056b3',
+    backgroundColor: "#0056b3",
+    transform: "scale(1.05)",
   };
   
-
+  const responsiveWrapperStyle = {
+    "@media (max-width: 768px)": {
+      formRowDoubleStyle: {
+        flexDirection: "column",
+      },
+    },
+  };
+  
   return (
-   <div style={formStyle}>
-  <h2 style={{ textAlign: 'center',fontSize:'22px', fontWeight:'bolder',fontFamily:'sans-serif' }}>Lead Form</h2>
-
-  <form onSubmit={handleSubmit}>
-    {/* File Upload */}
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="excel-upload">Upload File:</label>
-      <input
-        type="file"
-        id="excel-upload"
-        accept=".xlsx,.xls"
-        onChange={handleFileUpload}
-        style={inputStyle} />
+    <div style={formStyle}>
+      <h2 style={{ textAlign: "center", fontSize: "22px", fontWeight: "bolder", fontFamily: "sans-serif" }}>Lead Form</h2>
+  
+      <form onSubmit={handleSubmit}>
+        {/* File Upload */}
+        <div style={formRowStyle}>
+          <label style={labelStyle} htmlFor="excel-upload">Upload Excel File:</label>
+          <input
+            type="file"
+            id="excel-upload"
+            accept=".xlsx,.xls"
+            onChange={handleFileUpload}
+            style={inputStyle}
+          />
+        </div>
+  
+        {/* Name and Phone */}
+        <div style={formRowDoubleStyle}>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="name">Name:</label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="phone">Phone Number:</label>
+            <input
+              type="tel"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+        </div>
+  
+        {/* Email and Vehicle Model */}
+        <div style={formRowDoubleStyle}>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="email">Email ID:</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="vehicle-model">Vehicle Model:</label>
+            <input
+              type="text"
+              id="vehicle-model"
+              value={vehicleModel}
+              onChange={(e) => setVehicleModel(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+        </div>
+  
+        {/* Registration and Premium */}
+        <div style={formRowDoubleStyle}>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="reg-number">Registration No:</label>
+            <input
+              type="text"
+              id="reg-number"
+              value={regNumber}
+              onChange={(e) => setRegNumber(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="premium">Total Premium:</label>
+            <input
+              type="number"
+              id="premium"
+              value={premium}
+              onChange={(e) => setPremium(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+        </div>
+  
+        {/* Policy Dates */}
+        <div style={formRowDoubleStyle}>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="policy-start">Policy Start Date:</label>
+            <input
+              type="date"
+              id="policy-start"
+              value={policyStart}
+              onChange={(e) => setPolicyStart(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+          <div style={inputWrapperStyle}>
+            <label style={labelStyle} htmlFor="policy-expiry">Policy Expiry Date:</label>
+            <input
+              type="date"
+              id="policy-expiry"
+              value={policyExpiry}
+              onChange={(e) => setPolicyExpiry(e.target.value)}
+              required
+              style={inputStyle}
+            />
+          </div>
+        </div>
+  
+        {/* Lead Status */}
+        <div style={formRowStyle}>
+          <label style={labelStyle} htmlFor="lead-status">Lead Status:</label>
+          <select
+            id="lead-status"
+            value={leadStatus}
+            onChange={(e) => setLeadStatus(e.target.value)}
+            required
+            style={selectStyle}
+          >
+            <option value="New Lead">New Lead</option>
+            <option value="Contacted">Contacted</option>
+            <option value="Interested">Interested</option>
+            <option value="Quoted">Quoted</option>
+            <option value="Awaiting Response">Awaiting Response</option>
+            <option value="Negotiation">Negotiation</option>
+            <option value="Follow-up">Follow-up</option>
+            <option value="Converted">Converted</option>
+            <option value="Closed-Lost">Closed-Lost</option>
+            <option value="On Hold">On Hold</option>
+            <option value="Policy Issued">Policy Issued</option>
+            <option value="Renewal">Renewal</option>
+          </select>
+        </div>
+  
+        {/* Submit Button */}
+        <div>
+          <button
+            type="submit"
+            style={buttonStyle}
+            onMouseOver={(e) => (e.target.style.backgroundColor = buttonHoverStyle.backgroundColor)}
+            onMouseOut={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)}
+            disabled={loading}
+          >
+            {loading ? "Submitting..." : "Submit"}
+          </button>
+        </div>
+      </form>
     </div>
-
-    {/* Name */}
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="name">Name:</label>
-      <input
-        type="text"
-        id="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    {/* Phone Number */}
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="phone">Phone Number:</label>
-      <input
-        type="tel"
-        id="phone"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    {/* Email */}
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="email">Email ID:</label>
-      <input
-        type="email"
-        id="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    {/* Remaining Fields */}
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="vehicle-model">Vehicle Model:</label>
-      <input
-        type="text"
-        id="vehicle-model"
-        value={vehicleModel}
-        onChange={(e) => setVehicleModel(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="reg-number">Registration No:</label>
-      <input
-        type="text"
-        id="reg-number"
-        value={regNumber}
-        onChange={(e) => setRegNumber(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="policy-start">Policy Start Date:</label>
-      <input
-        type="date"
-        id="policy-start"
-        value={policyStart}
-        onChange={(e) => setPolicyStart(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="policy-expiry">Policy Expiry Date:</label>
-      <input
-        type="date"
-        id="policy-expiry"
-        value={policyExpiry}
-        onChange={(e) => setPolicyExpiry(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="current-provider">Current Provider:</label>
-      <input
-        type="text"
-        id="current-provider"
-        value={currentProvider}
-        onChange={(e) => setCurrentProvider(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="premium">Total Premium:</label>
-      <input
-        type="number"
-        id="premium"
-        value={premium}
-        onChange={(e) => setPremium(e.target.value)}
-        required
-        style={inputStyle}
-      />
-    </div>
-
-    <div style={formRowStyle}>
-      <label style={labelStyle} htmlFor="lead-status">Lead Status:</label>
-      <select
-        id="lead-status"
-        value={leadStatus}
-        onChange={(e) => setLeadStatus(e.target.value)}
-        required
-        style={selectStyle}
-      >
-        <option value="New Lead">New Lead</option>
-        <option value="Contacted">Contacted</option>
-        <option value="Interested">Interested</option>
-        <option value="Quoted">Quoted</option>
-        <option value="Awaiting Response">Awaiting Response</option>
-        <option value="Negotiation">Negotiation</option>
-        <option value="Follow-up">Follow-up</option>
-        <option value="Converted">Converted</option>
-        <option value="Closed-Lost">Closed-Lost</option>
-        <option value="On Hold">On Hold</option>
-        <option value="Policy Issued">Policy Issued</option>
-        <option value="Renewal">Renewal</option>
-      </select>
-    </div>
-
-    {/* Submit Button */}
-    <div>
-      <button
-        type="submit"
-        style={buttonStyle}
-        onMouseOver={(e) => (e.target.style.backgroundColor = buttonHoverStyle.backgroundColor)}
-        onMouseOut={(e) => (e.target.style.backgroundColor = buttonStyle.backgroundColor)}
-        disabled={loading}
-      >
-        {loading ? 'Submitting...' : 'Submit'}
-      </button>
-    </div>
-  </form>
-</div>
-
   );
-}
+}  
 
 export default ItemForm;

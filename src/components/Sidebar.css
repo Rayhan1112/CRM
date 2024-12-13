@@ -1,9 +1,9 @@
 /* Sidebar styling */
 .sidebar {
   width: 100px;
-  padding: 20px;
+  padding-top: 50px;
   height: 100vh;
-  margin-top: 70px;
+  margin-top: 100px;
   background-color: rgb(122, 114, 114);
   position: fixed;
   top: 0;
@@ -20,56 +20,96 @@
 /* Sidebar buttons */
 .sidebar-button {
   display: flex;
-  background-color: gray;
   align-items: center;
-  justify-content: center;
+  justify-content: center; /* Center the icon inside the button */
   padding: 15px;
   font-size: 1.8rem; /* Slightly larger icons */
-  width: 100%; /* Buttons fill the width */
-  text-align: center; /* Align text inside buttons */
+  width: 60px; /* Fixed size for buttons */
+  height: 60px; /* Fixed height for consistent look */
+  text-align: center;
   margin-bottom: 15px; /* Space between buttons */
   border: none;
-  background: transparent;
   color: white;
   cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth hover effect */
+  position: relative; /* For positioning tooltip */
+  transition: transform 0.3s ease; /* Smooth hover effect */
+  z-index: 2; /* Ensure it stacks above the sidebar background */
+
 }
 
 .sidebar-button:hover {
-  background-color: rgba(0, 0, 0, 0.3); 
   transform: translateX(5px); /* Slightly move button on hover */
-  cursor: pointer;
-  background-color: gray;
+  color: white;
 }
 
-
-.sidebar-button:hover svg {
-  color: green; /* green color for the icons on hover */
+/* Tooltip styling */
+.sidebar-button:hover::after {
+  content: attr(title); /* Display the content of the title attribute */
+  position: absolute;
+  top: 50%; /* Align the tooltip vertically with the button */
+  left: 110%; /* Position the tooltip to the right of the button */
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.8); /* Tooltip background color */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  white-space: nowrap; /* Prevent text wrapping */
+  z-index: 1000; /* Ensure tooltip is above all other elements */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-
-/* Sidebar hover effect for buttons */
-.sidebar button:active {
-  transform: translateX(2px); 
+.sidebar-button:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Icon size */
 .sidebar-button svg {
-  font-size: 2rem; /* Increase the icon size */
-  margin-right: 10px; /* Space between icon and button */
+  font-size: 2rem; /* Set icon size */
 }
 
-/* Sidebar background blur effect */
-.sidebar::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  filter: blur(50px);
-  z-index: -1;
-  animation: moveBlur 8s infinite alternate;
+/* Center the icons perfectly */
+.sidebar-button {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center icon within the button */
+}
+
+/* Active state for buttons */
+.sidebar-button:active {
+  transform: translateX(2px); 
+}
+
+/* Sidebar responsiveness */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 70px; /* Shrink sidebar on smaller screens */
+    padding: 10px;
+  }
+  .sidebar-button {
+    font-size: 1.5rem;
+    padding: 10px;
+    width: 50px; /* Adjust size for smaller screens */
+    height: 50px;
+  }
+  .sidebar-button:hover::after {
+    font-size: 0.8rem; /* Adjust tooltip size */
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 50px; /* Further shrink sidebar on very small screens */
+  }
+  .sidebar-button {
+    font-size: 1.2rem;
+  }
 }
 
 /* Animation for background blur */
@@ -82,45 +122,11 @@
   }
 }
 
+
 /* Styling for the content area (where main content will appear) */
 .content {
   padding: 20px;
   flex-grow: 1;
-  margin-left: 220px; /* Space for the sidebar */
+  margin-left: 100px; /* Space for the sidebar */
 }
 
-/* For better spacing around buttons */
-.sidebar button {
-  margin-top: 30px;
-  font-style: italic;
-}
-
-.sidebar-button.btn.btn-primary{
-  color: white;
-  background: gray;
-  border-color: gray;
-}
-
-
-
-/* .... */
-
-.sidebar-button .button-label {
-  margin-left: 8px;
-}
-
-/* Tooltip Style */
-.sidebar-button:hover::after {
-  content: attr(title); /* Display the content of the title attribute */
-  position: absolute;
-  bottom: -25px; /* Position the tooltip below the icon */
-  left: 50%;
-  transform: translateX(-50%);
-  /* background-color: rgba(0, 0, 0, 0.8); */  
-  color: white;
-  padding: 2px;
-  border-radius: 5px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 100;
-}
