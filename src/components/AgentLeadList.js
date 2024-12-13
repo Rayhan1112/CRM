@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Table } from 'react-bootstrap'; // Bootstrap table for displaying data
+import { Table } from 'react-bootstrap';
 
 function AgentLeadList() {
   const [agents, setAgents] = useState([]);
@@ -9,8 +8,9 @@ function AgentLeadList() {
   useEffect(() => {
     const fetchAgents = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/agents');
-        setAgents(response.data); // Store the fetched data
+        const response = await axios.get('http://localhost:5000/api/leads');
+        console.log('Fetched Agents:', response.data); // Debug log
+        setAgents(response.data);
       } catch (error) {
         console.error('Error fetching agent leads:', error);
         alert('Failed to fetch agent leads.');
@@ -18,7 +18,7 @@ function AgentLeadList() {
     };
 
     fetchAgents();
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+  }, []);
 
   return (
     <div>
@@ -35,16 +35,24 @@ function AgentLeadList() {
           </tr>
         </thead>
         <tbody>
-          {agents.map((agent, index) => (
-            <tr key={index}>
-              <td>{agent.id}</td> {/* Display agent ID */}
-              <td>{agent.name}</td>
-              <td>{agent.email}</td>
-              <td>{agent.password || 'N/A'}</td> {/* Display agent password */}
-              <td>{agent.leadStatus}</td>
-              <td>{agent.assignedLeads || 'N/A'}</td> {/* Display assigned leads or default to 'N/A' */}
+          {agents.length > 0 ? (
+            agents.map((agent, index) => (
+              <tr key={index}>
+                <td>{agent.id}</td>
+                <td>{agent.name}</td>
+                <td>{agent.email}</td>
+                <td>{agent.password}</td>
+                <td>{agent.leadStatus}</td>
+                <td>{agent.assignedLeads}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="6" style={{ textAlign: 'center' }}>
+                No data available
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </Table>
     </div>
@@ -52,7 +60,3 @@ function AgentLeadList() {
 }
 
 export default AgentLeadList;
-
-
-
-

@@ -88,42 +88,42 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userType, setUserType] = useState(null);  // Track the type of user ('admin' or 'agent')
+  const [userType, setUserType] = useState(null);  
   const [activeSection, setActiveSection] = useState('orders');
   const [items, setItems] = useState([]);
 
-  // Function to handle item addition
+
   const addItem = (item) => {
     setItems([...items, item]);
   };
 
-  // Handle user sign-in and set the user type
+
   const handleSignIn = (type) => {
     setIsAuthenticated(true);
-    setUserType(type);  // Set userType as 'admin' or 'agent'
+    setUserType(type);  
   };
 
-  // Handle sign-out and reset the user type
+  
   const handleSignOut = () => {
     setIsAuthenticated(false);
-    setUserType(null);  // Reset userType on sign-out
+    setUserType(null);  
   };
 
  
   const renderSection = () => {
     if (!isAuthenticated) {
-      return <SignIn onSignIn={handleSignIn} />; // Pass handleSignIn to SignIn component
+      return <SignIn onSignIn={handleSignIn} />; 
     }
   
     switch (activeSection) {
       case 'addItem':
-        return <ItemForm onAddItem={addItem} />; // Admin access
+        return <ItemForm onAddItem={addItem} />; 
       case 'listItems':
-        return <ItemList items={items} />; // Admin access
+        return <ItemList items={items} />; 
       case 'orders':
-        return <OrdersPage />; // Both admin and agent access
+        return <OrdersPage />; 
       case 'agentlead':
-        return <AgentLead />; // Admin access added
+        return <AgentLead />; 
       case 'agentleadlist':
         return <AgentLeadList/>
       default:
@@ -133,10 +133,10 @@ function App() {
 
   return (
     <div className="App">
-      {/* Render header only when authenticated */}
+    
       {isAuthenticated && <Header userType={userType} onSignOut={handleSignOut} />}
       <div className="main-content">
-        {/* Render sidebar only when authenticated */}
+      
         {isAuthenticated && (
           <Sidebar setActiveSection={setActiveSection} userType={userType} />
         )}

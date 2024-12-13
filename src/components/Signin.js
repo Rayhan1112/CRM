@@ -15,7 +15,7 @@ const SignIn = ({ onSignIn }) => {
 
     if (userType === 'agent') {
       try {
-        const response = await fetch('http://localhost:5000/api/agents/login', {
+        const response = await fetch('http://localhost:5000/api/agents', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ email: trimmedEmail, password: trimmedPassword }),
@@ -25,7 +25,7 @@ const SignIn = ({ onSignIn }) => {
 
         if (response.ok) {
           alert('Login successful!');
-          onSignIn('agent'); // Notify parent about successful agent login
+          onSignIn('agent'); 
           setError('');
         } else {
           setError(data.message);
@@ -35,7 +35,7 @@ const SignIn = ({ onSignIn }) => {
         console.error('Error during login:', error);
       }
     } else {
-      // Admin login logic
+      
       if (trimmedEmail === 'admin@1.com' && trimmedPassword === '123') {
         onSignIn('admin');
         alert('Signed in as Admin!');
@@ -52,7 +52,7 @@ const SignIn = ({ onSignIn }) => {
       {error && <div className="error">{error}</div>}
 
       <form onSubmit={handleLogin}>
-        {/* User Type Selection */}
+    
         <div className="user-type-toggle">
           <button
             type="button"
@@ -70,7 +70,7 @@ const SignIn = ({ onSignIn }) => {
           </button>
         </div>
 
-        {/* Email Input */}
+        
         <div>
           <label>Email:</label>
           <input
@@ -81,7 +81,7 @@ const SignIn = ({ onSignIn }) => {
           />
         </div>
 
-        {/* Password Input */}
+        
         <div>
           <label>Password:</label>
           <input
@@ -92,7 +92,7 @@ const SignIn = ({ onSignIn }) => {
           />
         </div>
 
-        {/* Sign In Button */}
+        
         <button type="submit">Sign In</button>
       </form>
     </div>

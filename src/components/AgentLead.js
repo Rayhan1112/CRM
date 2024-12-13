@@ -8,9 +8,9 @@ function AgentLead() {
     id: '', // Field for ID
     name: '',
     email: '',
-    password: '', // Field for password
+    password: '', 
     leadStatus: 'New Lead',
-    assignedLeads: '', // New field for assigned leads
+    assignedLeads: '', 
   });
 
   const handleChange = (e) => {
