@@ -1,3 +1,4 @@
+
 import React from 'react';
 import './Sidebar.css';
 import { FaPlusCircle, FaBox, FaListAlt, FaUserTie } from 'react-icons/fa'; // Importing icons from react-icons
@@ -52,4 +53,4 @@ function Sidebar({ setActiveSection, userType }) {
   );
 }
 
-export default Sidebar;
+export default Sidebar; 
