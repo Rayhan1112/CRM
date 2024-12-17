@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import './App.css';
-
+import './SignIn.css'
 const SignIn = ({ onSignIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,6 +46,8 @@ const SignIn = ({ onSignIn }) => {
   };
 
   return (
+    <div className='mainContainer'>
+
     <div className="signin-container">
       <h2>Sign In</h2>
       {error && <div className="error">{error}</div>}
@@ -96,6 +97,8 @@ const SignIn = ({ onSignIn }) => {
         <button type="submit">Sign In</button>
       </form>
     </div>
+    </div>
+
   );
 };
 
