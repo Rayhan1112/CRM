@@ -2,10 +2,11 @@
     margin: 20px auto;
     font-family: "cursive";
     font-weight: 900;
+    align-items: center;
   }
   
   .table-container {
-    overflow-x: auto;
+    overflow-x: center
   }
   
   thead th {
