@@ -1,7 +1,9 @@
 /* Navbar Container */
 .header-navbar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: rgb(122, 114, 114);
+ background-image: url(./image1.jpg);
+ 
+ background-size: cover;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   padding: 0 15px; /* Consistent padding */
 }

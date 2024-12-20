@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import './SignIn.css'
+import './SignIn.css';
+
 const SignIn = ({ onSignIn }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -24,17 +25,16 @@ const SignIn = ({ onSignIn }) => {
 
         if (response.ok) {
           alert('Login successful!');
-          onSignIn('agent'); 
+          onSignIn('agent');
           setError('');
         } else {
-          setError(data.message);
+          setError(data.message || 'Invalid credentials. Please try again.');
         }
       } catch (error) {
-        setError('An error occurred. Please try again.');
+        setError('An error occurred. Please try again later.');
         console.error('Error during login:', error);
       }
     } else {
-      
       if (trimmedEmail === 'admin@1.com' && trimmedPassword === '123') {
         onSignIn('admin');
         alert('Signed in as Admin!');
@@ -46,59 +46,50 @@ const SignIn = ({ onSignIn }) => {
   };
 
   return (
-    <div className='mainContainer'>
+    <div className="signin-page">
+      <div className="signin-container">
+        <h2>Sign In</h2>
+        {error && <div className="error">{error}</div>}
 
-    <div className="signin-container">
-      <h2>Sign In</h2>
-      {error && <div className="error">{error}</div>}
-
-      <form onSubmit={handleLogin}>
-    
-        <div className="user-type-toggle">
-          <button
-            type="button"
-            className={`toggle-btn ${userType === 'admin' ? 'active' : ''}`}
-            onClick={() => setUserType('admin')}
-          >
-            Admin
-          </button>
-          <button
-            type="button"
-            className={`toggle-btn ${userType === 'agent' ? 'active' : ''}`}
-            onClick={() => setUserType('agent')}
-          >
-            Agent
-          </button>
-        </div>
-
-        
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-
-        
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        
-        <button type="submit">Sign In</button>
-      </form>
+        <form onSubmit={handleLogin}>
+          <div className="user-type-toggle">
+            <button
+              type="button"
+              className={`toggle-btn ${userType === 'admin' ? 'active' : ''}`}
+              onClick={() => setUserType('admin')}
+            >
+              Admin
+            </button>
+            <button
+              type="button"
+              className={`toggle-btn ${userType === 'agent' ? 'active' : ''}`}
+              onClick={() => setUserType('agent')}
+            >
+              Agent
+            </button>
+          </div>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button type="submit">Sign In</button>
+        </form>
+      </div>
     </div>
-    </div>
-
   );
 };
 
