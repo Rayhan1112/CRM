@@ -84,6 +84,10 @@ import AgentLead from './components/AgentLead';
 import AgentLeadList from './components/AgentLeadList';
 
 import './App.css';
+import LogoSlider from './components/OurClient/LogoSlider';
+import AboutUs from './components/AboutUs/Aboutus';
+import Testimonials from './components/Testomonials/Testomonials';
+import Contact from './components/Contact/Contact';
 
 
 function App() {
@@ -142,6 +146,7 @@ function App() {
         )}
         <div className="content">{renderSection()}</div>
       </div>
+    
     </div>
   );
 }
