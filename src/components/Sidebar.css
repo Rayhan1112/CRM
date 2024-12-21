@@ -3,7 +3,9 @@
   padding-top: 50px;
   height: 100vh;
   margin-top: 100px;
-  background-color: rgb(122, 114, 114);
+  background-image: url(./image1.jpg);
+ 
+  background-size: cover;
   position: fixed;
   top: 0;
   left: 0;

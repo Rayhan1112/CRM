@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Sidebar from "./Sidebar"; // Sidebar for navigation
-import ItemList from "./ItemList"; // Existing component
-import OrdersPage from "./OrdersPage"; // Existing component
-import AgentLead from "./AgentLead"; // Include AgentLead component
-import "./MainAdminComponent.css"; // Assuming a CSS file for styles
+import Sidebar from "./Sidebar"; 
+import ItemList from "./ItemList"; 
+import OrdersPage from "./OrdersPage"; 
+import AgentLead from "./AgentLead"; 
+import "./MainAdminComponent.css"; 
 
 function MainAdminComponent({ userType }) {
-  const [activeSection, setActiveSection] = useState("itemList"); // Default section for admin
+  const [activeSection, setActiveSection] = useState("itemList"); 
 
-  // Conditional rendering based on the active section
+  
   const renderSection = () => {
     if (userType === "admin") {
       switch (activeSection) {

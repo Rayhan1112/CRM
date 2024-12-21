@@ -1,0 +1,143 @@
+
+
+.welcome-page {
+ background-image: url(./image1.jpg) ;
+ background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.welcome-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #ffffff;
+  padding: 80px;
+  margin-top: -50px;
+  margin-bottom: 60px;
+  border-radius: 30px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  max-width: 950px;
+  width: 100%;
+  opacity: 0;
+  animation: fadeInUp 1s ease-in-out forwards;
+}
+
+.welcome-main h1 {
+  font-size: 3.8rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  font-weight: bold;
+  line-height: 1.2;
+  opacity: 0;
+  animation: slideIn 1s ease-in-out forwards 0.3s;
+}
+
+.welcome-main p {
+  font-size: 1.6rem;
+  color: #34495e;
+  margin-bottom: 30px;
+  line-height: 1.5;
+  max-width: 85%;
+  opacity: 0;
+  animation: slideIn 1s ease-in-out forwards 0.6s;
+}
+
+.info-section {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.info-section h3 {
+  font-size: 2rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.info-section ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  font-size: 1.3rem;
+  color: #34495e;
+}
+
+.info-section li {
+  margin-bottom: 10px;
+}
+
+.welcome-main .btn-primary {
+  padding: 18px 35px;
+  font-size: 1.4rem;
+  color: #ffffff;
+  background: #2980b9;
+  border: none;
+  border-radius: 35px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
+}
+
+.welcome-main .btn-primary:hover {
+  background: #3498db;
+  box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+}
+
+@media (max-width: 768px) {
+  .welcome-main {
+      padding: 60px;
+      border-radius: 25px;
+      margin-top: -30px;
+      margin-bottom: 40px;
+  }
+
+  .welcome-main h1 {
+      font-size: 2.8rem;
+  }
+
+  .welcome-main p {
+      font-size: 1.3rem;
+  }
+
+  .info-section h3 {
+      font-size: 1.6rem;
+  }
+
+  .info-section ul {
+      margin-left: 15px;
+  }
+
+  .welcome-main .btn-primary {
+      padding: 15px 28px;
+      font-size: 1.2rem;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(30px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
