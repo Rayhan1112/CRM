@@ -1,12 +1,14 @@
 /* Navbar Container */
 .header-navbar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
- background-image: url(./image1.jpg);
- 
- background-size: cover;
+background-color: #2D3E50;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
   padding: 0 15px; /* Consistent padding */
 }
+
+  
+
+
 
 /* Logo */
 .logo {
@@ -18,15 +20,17 @@
 .search-form {
   flex-grow: 1;
   max-width: 300px;
+  
 }
 
 /* Search Bar */
 .search-bar {
   width: 100%;
-  border: 1px solid #ccc;
+  
   border-radius: 4px;
   font-size: 16px;
-  background-color: white;
+ 
+  
 }
 
 /* Navbar Icons */
@@ -62,6 +66,7 @@
   padding: 8px 12px;
   margin: 0 5px; /* Spacing between buttons */
   transition: background-color 0.3s ease;
+  font-family: 'Lexend Deca'
 }
 
 .upgrade-btn:hover,
@@ -72,18 +77,18 @@
 /* Profile Icon */
 .profile-icon {
   padding: 5px;
-  color: black;
+  color: white;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(235, 231, 231, 0.1);
  
 }
 
 .profile-icon:hover {
-  background-color: rgb(101, 221, 101);
+  background-color: rgb(236, 243, 246);
   transform: scale(1.1);
 }
 

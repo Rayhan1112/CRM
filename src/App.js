@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 
 // import React, { useState } from 'react';
@@ -83,26 +82,12 @@ import SignIn from './components/Signin';
 import OrdersPage from './components/OrdersPage';
 import AgentLead from './components/AgentLead';
 import AgentLeadList from './components/AgentLeadList';
+import WelcomePage from './components/WelcomePage'
 
 import './App.css';
-import LogoSlider from './components/OurClient/LogoSlider';
-import AboutUs from './components/AboutUs/Aboutus';
-import Testimonials from './components/Testomonials/Testomonials';
-import Contact from './components/Contact/Contact';
 
-=======
-import React, { useState } from "react";
-import Header from "./components/Header";
-import Sidebar from "./components/Sidebar";
-import ItemForm from "./components/ItemForm";
-import ItemList from "./components/ItemList";
-import SignIn from "./components/Signin";
-import OrdersPage from "./components/OrdersPage";
-import AgentLead from "./components/AgentLead";
-import AgentLeadList from "./components/AgentLeadList";
-import WelcomePage from "./components/WelcomePage"; 
-import "./App.css";
->>>>>>> 1d1654d69cb973423dd51ddce74102285edd1c44
+
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

@@ -13,13 +13,15 @@ function Sidebar({ setActiveSection, userType }) {
             onClick={() => setActiveSection('addItem')}
             className="sidebar-button"
             title="Add Item" // Tooltip text
+             variant='outline-success'
           >
             <FaPlusCircle /> {/* Icon for "Add Item" */}
           </Button>
           <Button
             onClick={() => setActiveSection('orders')}
             className="sidebar-button"
-            title="Orders" // Tooltip text
+            title="Orders" // Tooltip text 
+            variant='outline-success'
           >
             <FaBox /> {/* Icon for "Orders" */}
           </Button>
@@ -27,6 +29,7 @@ function Sidebar({ setActiveSection, userType }) {
             onClick={() => setActiveSection('listItems')}
             className="sidebar-button"
             title="List Items" // Tooltip text
+             variant='outline-success'
           >
             <FaListAlt /> {/* Icon for "List Items" */}
           </Button>
@@ -34,6 +37,7 @@ function Sidebar({ setActiveSection, userType }) {
             onClick={() => setActiveSection('agentlead')}
             className="sidebar-button"
             title="Agent Lead" // Tooltip text
+             variant='outline-success'
           >
             <FaUserTie /> {/* Icon for "Agent Lead" */}
           </Button>
@@ -41,6 +45,7 @@ function Sidebar({ setActiveSection, userType }) {
             onClick={() => setActiveSection('agentleadlist')}
             className="sidebar-button"
             title="Agent Lead List" // Tooltip text
+             variant='outline-success'
           >
             <FaListAlt /> {/* Icon for "Agent Lead List" */}
           </Button>

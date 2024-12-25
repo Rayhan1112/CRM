@@ -3,6 +3,7 @@
 /* Grid layout for the summary section */
 
 .summary-grid {
+  font-family: 'Lexend Deca';
     display: grid;
     grid-template-columns: repeat(4, 1fr); 
     gap: 20px; /* Gap between grid items */
@@ -13,6 +14,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   }
     .summary-item {
+      font-family: 'Lexend Deca';
       border: 1px solid #ccc; /* Border for each item */
       padding: 15px; /* Padding inside items */
       text-align: center; /* Center align text */
@@ -36,6 +38,7 @@
     }
     
     .summary-item h4 {
+     
       margin: 0;
       font-size: 1.1em;
       color: #333;
@@ -51,6 +54,8 @@
     
     /* Styling for the Order Table */
     table {
+      font-family: 'Lexend Deca';
+      font-weight: 100;
       width: 100%;
       border-collapse: collapse; /* Remove double borders */
       margin-top: 20px;

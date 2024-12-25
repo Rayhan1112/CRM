@@ -1,26 +1,130 @@
 
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import "@fontsource/lexend-deca"; // Defaults to weight 400
+import "@fontsource/lexend-deca/400.css"; // Weight 400
+import "@fontsource/lexend-deca/700.css"; // Weight 700
 
-const excelSerialToDate = (serial) => {
-  const startDate = new Date(1900, 0, 1);
-  const date = new Date(startDate.getTime() + (serial - 2) * 86400000);
-  return date.toISOString().split('T')[0];
+
+
+
+
+const formStyle = {
+  fontFamily: 'Lexend Deca ',
+  fontWeight:900,
+  display: "flex",
+  flexDirection: "column",
+  gap: "20px",
+  maxWidth: "700px",
+  padding: "20px",
+   backgroundColor: "white",
+ 
+
+  borderRadius: "12px",
+  boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
+  width: "100%",
+};
+const formContainerStyle = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  gap: '20px',
+};
+const previewStyle = {
+  fontFamily: 'Lexend Deca ',
+  flex: 1,
+  background: 'white',
+  border: '1px solid #ccc',
+  borderRadius: '8px',
+  padding: '20px',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  backdropFilter: 'blur(5px)',
 };
 
-function ItemForm({ onAddItem }) {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [vehicleModel, setVehicleModel] = useState('');
-  const [regNumber, setRegNumber] = useState('');
-  const [policyStart, setPolicyStart] = useState('');
-  const [policyExpiry, setPolicyExpiry] = useState('');
-  const [currentProvider, setCurrentProvider] = useState('');
-  const [premium, setPremium] = useState('');
-  const [leadStatus, setLeadStatus] = useState('New Lead');
+const cardStyle = {
+  marginTop: '20px',
+  background: '#F8FAFC',
+  borderRadius: '8px',
+  boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+  padding: '10px',
+};
 
+const titleStyle = {
+  fontSize: '18px',
+  fontWeight: 'bold',
+  textAlign: 'center',
+  color: 'black',
+  textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)',
+};
+
+const animatedTextStyle = {
+  fontSize: '16px',
+  color: 'black',
+  fontWeight: 'bold',
+  animation: 'fadeIn 1s ease-in-out',
+  textShadow: '0 1px 3px rgba(0, 123, 255, 0.5)',
+};
+
+const formRowDoubleStyle = {
+  display: "flex",
+  flexDirection: "row",
+  gap: "20px",
+  width: "100%",
+  flexWrap: "wrap",
+};
+
+const inputWrapperStyle = {
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+};
+
+const labelStyle = {
+  fontSize: "14px",
+  fontWeight: "900",
+  textAlign: "left",
+  color: "black",
+ 
+};
+
+const inputStyle = {
+  padding: "12px",
+  border: "1px solid #9AA6B2",
+  borderRadius: "0px",
+  fontSize: "14px",
+  outline: "none",
+  width: "100%",
+  backgroundColor:'#F5F8FA'
+};
+
+const selectStyle = { ...inputStyle };
+
+const buttonStyle = {
+  padding: "12px 20px",
+  backgroundColor: "#007bff",
+  color: "white",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "16px",
+  fontWeight: "600",
+  cursor: "pointer",
+  width: "100%",
+};
+
+
+function ItemForm({ onAddItem }) {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [vehicleModel, setVehicleModel] = useState("");
+  const [regNumber, setRegNumber] = useState("");
+  const [policyStart, setPolicyStart] = useState("");
+  const [policyExpiry, setPolicyExpiry] = useState("");
+  const [currentProvider, setCurrentProvider] = useState("");
+  const [premium, setPremium] = useState("");
+  const [leadStatus, setLeadStatus] = useState("New Lead");
   const [importedData, setImportedData] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleFileUpload = (e) => {
@@ -29,63 +133,60 @@ function ItemForm({ onAddItem }) {
       const reader = new FileReader();
       reader.onload = (event) => {
         const binaryStr = event.target.result;
-        const wb = XLSX.read(binaryStr, { type: 'binary' });
+        const wb = XLSX.read(binaryStr, { type: "binary" });
         const sheetName = wb.SheetNames[0];
         const sheet = wb.Sheets[sheetName];
-        const data = XLSX.utils.sheet_to_json(sheet);
+        let data = XLSX.utils.sheet_to_json(sheet);
+
+        // Filter out empty rows
+        data = data.filter(
+          (row) => Object.values(row).some((value) => value !== null && value !== undefined && value !== "")
+        );
+
         setImportedData(data);
+        setShowPopup(true);
       };
       reader.readAsBinaryString(file);
     }
   };
 
-  const validateImportedData = (data) => {
-    const phoneRegex = /^[0-9]{10}$/;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  const handleBulkSubmit = async () => {
+    setLoading(true);
 
-    return data.every((item) => {
-      if (item.policyStart && !dateRegex.test(item.policyStart)) {
-        item.policyStart = excelSerialToDate(Number(item.policyStart));
-      }
-      if (item.policyExpiry && !dateRegex.test(item.policyExpiry)) {
-        item.policyExpiry = excelSerialToDate(Number(item.policyExpiry));
+    if (importedData.length === 0) {
+      alert("No data to submit. Please upload a valid file first.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:5000/api/leads", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(importedData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit leads");
       }
 
-      return (
-        item.name &&
-        item.phone && phoneRegex.test(item.phone) &&
-        item.email && emailRegex.test(item.email) &&
-        item.vehicleModel &&
-        item.regNumber &&
-        item.policyStart && dateRegex.test(item.policyStart) &&
-        item.policyExpiry && dateRegex.test(item.policyExpiry) &&
-        item.currentProvider &&
-        item.premium && !isNaN(item.premium) &&
-        item.leadStatus &&
-        [
-          'New Lead',
-          'Contacted',
-          'Interested',
-          'Quoted',
-          'Awaiting Response',
-          'Negotiation',
-          'Follow-up',
-          'Converted',
-          'Closed-Lost',
-          'On Hold',
-          'Policy Issued',
-          'Renewal',
-        ].includes(item.leadStatus)
-      );
-    });
+      setImportedData([]);
+      setShowPopup(false);
+      alert("Data submitted successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSubmit = async (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    const newLead = {
+    const leadData = {
       name,
       phone,
       email,
@@ -99,203 +200,108 @@ function ItemForm({ onAddItem }) {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/api/leads', {
-        method: 'POST',
+      const response = await fetch("http://localhost:5000/api/leads", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(newLead),
+        body: JSON.stringify(leadData),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to submit lead');
+        throw new Error("Failed to submit lead");
       }
 
-      const savedLead = await response.json();
-      onAddItem(savedLead);
-      resetForm();
+      alert("Lead submitted successfully!");
+      setName("");
+      setPhone("");
+      setEmail("");
+      setVehicleModel("");
+      setRegNumber("");
+      setPolicyStart("");
+      setPolicyExpiry("");
+      setCurrentProvider("");
+      setPremium("");
+      setLeadStatus("New Lead");
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleBulkSubmit = async () => {
-    setLoading(true);
-
-    if (importedData.length === 0) {
-      alert('No data to submit. Please upload a valid file first.');
-      setLoading(false);
-      return;
-    }
-
-    if (!validateImportedData(importedData)) {
-      alert('Some of the imported data is missing required fields.');
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const response = await fetch('http://localhost:5000/api/leads', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(importedData),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to submit leads');
-      }
-
-      setImportedData([]);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error:', error);
-      setLoading(false);
-    }
+  const closePopup = () => {
+    setShowPopup(false);
   };
 
-  const resetForm = () => {
-    setName('');
-    setPhone('');
-    setEmail('');
-    setVehicleModel('');
-    setRegNumber('');
-    setPolicyStart('');
-    setPolicyExpiry('');
-    setCurrentProvider('');
-    setPremium('');
-    setLeadStatus('New Lead');
-  };
-
-  const formStyle = {
-    fontFamily: "Times New Roman, serif",
-    display: "flex",
-    flexDirection: "column",
-    gap: "20px",
-    maxWidth: "700px",
-    padding: "20px",
-     backgroundColor: "#76E5FC",
-   
-  
+  const popupStyle = {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    backgroundColor: "white",
+    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.25)",
     borderRadius: "12px",
-    boxShadow: "0 6px 12px rgba(0, 0, 0, 0.1)",
-    width: "100%",
-  };
-  const formContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    gap: '20px',
-  };
-  const previewStyle = {
-    flex: 1,
-    background: '#76E5FC',
-    border: '1px solid #ccc',
-    borderRadius: '8px',
-    padding: '20px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    backdropFilter: 'blur(5px)',
-  };
-  
-  const cardStyle = {
-    marginTop: '20px',
-    background: '#B7FDFE',
-    borderRadius: '8px',
-    boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
-    padding: '10px',
-  };
-  
-  const titleStyle = {
-    fontSize: '18px',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    color: '#333',
-    textShadow: '1px 1px 2px rgba(0, 0, 0, 0.2)',
-  };
-  
-  const animatedTextStyle = {
-    fontSize: '16px',
-    color: '#333',
-    fontWeight: 'bold',
-    animation: 'fadeIn 1s ease-in-out',
-    textShadow: '0 1px 3px rgba(0, 123, 255, 0.5)',
+    padding: "20px",
+    zIndex: 1000,
+    maxWidth: "80%",
+    overflowY: "auto",
   };
 
-  const formRowDoubleStyle = {
-    display: "flex",
-    flexDirection: "row",
-    gap: "20px",
-    width: "100%",
-    flexWrap: "wrap",
-  };
-
-  const inputWrapperStyle = {
-    flex: 1,
-    display: "flex",
-    flexDirection: "column",
-  };
-
-  const labelStyle = {
-    fontSize: "14px",
-    fontWeight: "600",
-    textAlign: "left",
-    color: "#333",
-  };
-
-  const inputStyle = {
-    padding: "12px",
-    border: "1px solid #ccc",
-    borderRadius: "8px",
-    fontSize: "14px",
-    outline: "none",
-    width: "100%",
-  };
-
-  const selectStyle = { ...inputStyle };
-
-  const buttonStyle = {
-    padding: "12px 20px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    fontSize: "16px",
-    fontWeight: "600",
-    cursor: "pointer",
-    width: "100%",
+  const overlayStyle = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 999,
   };
 
   return (
-    <div style={formContainerStyle}>
-    <div style={formStyle}>
-      <h2 style={{ textAlign: "center", fontSize: "22px", fontWeight: "bolder" }}>Lead Form</h2>
-      <form onSubmit={handleSubmit}>
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <label style={labelStyle} htmlFor="excel-upload">Upload Excel File:</label>
-          <input
-            type="file"
-            id="excel-upload"
-            accept=".xlsx,.xls"
-            onChange={handleFileUpload}
-            style={inputStyle}
-          />
-        </div>
+    <div>
+      <div>
+        <div style={formContainerStyle}>
+          <div style={formStyle}>
+            <h2 style={{ textAlign: "center", fontSize: "22px", fontWeight: "bolder" }}>Lead Form</h2>
+            <form onSubmit={handleFormSubmit}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <label style={labelStyle} htmlFor="excel-upload">Upload Excel File:</label>
+                <input
+                  type="file"
+                  id="excel-upload"
+                  accept=".xlsx,.xls"
+                  onChange={handleFileUpload}
+                  style={inputStyle}
+                />
+              </div>
 
-        <div style={formRowDoubleStyle}>
-          <div style={inputWrapperStyle}>
-            <label style={labelStyle} htmlFor="name">Name:</label>
-            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required style={inputStyle} />
-          </div>
-          <div style={inputWrapperStyle}>
-            <label style={labelStyle} htmlFor="phone">Phone Number:</label>
-            <input type="tel" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} required style={inputStyle} />
-          </div>
-        </div>
-
-        <div style={formRowDoubleStyle}>
+              {/* Form fields */}
+              <div style={formRowDoubleStyle}>
+                <div style={inputWrapperStyle}>
+                  <label style={labelStyle} htmlFor="name">Name:</label>
+                  <input
+                    type="text"
+                    id="name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    style={inputStyle}
+                  />
+                </div>
+                <div style={inputWrapperStyle}>
+                  <label style={labelStyle} htmlFor="phone">Phone Number:</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    required
+                    style={inputStyle}
+                  />
+                </div>
+              </div>
+              <div style={formRowDoubleStyle}>
           <div style={inputWrapperStyle}>
             <label style={labelStyle} htmlFor="email">Email ID:</label>
             <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
@@ -393,9 +399,7 @@ function ItemForm({ onAddItem }) {
       </form>
         {/* Preview Section */}
         
-
-    
-    </div>
+        </div>
     <div className="col-md-5" style={previewStyle}>
     <div className="card" style={cardStyle}>
       <div className="card-body">
@@ -445,8 +449,86 @@ function ItemForm({ onAddItem }) {
   </div>
         </div>
         
+      </div>
+
+      {/* Excel Data Popup */}
+      {showPopup && (
+        <>
+          <div style={overlayStyle} onClick={closePopup}></div>
+          <div style={popupStyle}>
+            <h3 style={{ textAlign: "center" }}>Imported Excel Data</h3>
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  {Object.keys(importedData[0] || {}).map((key) => (
+                    <th
+                      key={key}
+                      style={{
+                        border: "1px solid #ddd",
+                        padding: "8px",
+                        backgroundColor: "#f2f2f2",
+                      }}
+                    >
+                      {key}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {importedData.map((row, index) => (
+                  <tr key={index}>
+                    {Object.values(row).map((value, idx) => (
+                      <td
+                        key={idx}
+                        style={{
+                          border: "1px solid #ddd",
+                          padding: "8px",
+                        }}
+                      >
+                        {value}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button
+  style={{
+    marginTop: "20px",
+    padding: "10px 20px",
+    backgroundColor: "#007bff",
+    color: "white",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+  }}
+  onClick={handleBulkSubmit}
+  disabled={loading}
+>
+  {loading ? "Submitting..." : "Submit Excel Data"}
+</button>
+
+<button
+  style={{
+    marginTop: "20px", // Same marginTop to align both buttons
+    padding: "10px 20px",
+    backgroundColor: "red", // Red color for the button
+    color: "white", // White text color
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    marginLeft: "10px", // Adds space between buttons
+  }}
+  onClick={closePopup}
+>
+  Cancel
+</button>
+
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
-export default ItemForm;
-
+export default ItemForm;
