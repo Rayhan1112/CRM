@@ -17,6 +17,8 @@ import { MdEditSquare } from "react-icons/md";
 import { MdOutlineCreateNewFolder } from "react-icons/md";
 import { FaFileExcel } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
+import "@fontsource/lexend-deca"; // Defaults to weight 400
+
 import "./styles.css"; // Import the external CSS
 
 function ItemList() {
@@ -139,7 +141,7 @@ function ItemList() {
             <Dropdown.Item href="#">Qualified</Dropdown.Item>
           </DropdownButton>
         </div>
-        <div className="d-flex align-items-center" style={{gap:"25px"}}>
+        <div className="d-flex align-items-center" style={{gap:"25px",marginLeft:'10px'}}>
           <Button variant="outline-primary" className="mr-2">
             <AiOutlineFilter /> Advanced Filters
           </Button>
@@ -159,7 +161,7 @@ function ItemList() {
               <thead>
                 <tr>
                   <th colSpan={selectedHeaders.length + 1}>
-                    <div className="btn-group" style={{gap:'200px',fontFamily:'monospace',fontWeight:'bolder'}}>
+                    <div className="btn-group" style={{gap:'200px',fontFamily:'Lexend Deca',fontWeight:'bolder'}}>
                       <DropdownButton
                         id="dropdown-basic-button"
                         title={`Filters: ${filteredField}`}

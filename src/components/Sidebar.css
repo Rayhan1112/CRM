@@ -1,11 +1,10 @@
+
 .sidebar {
-  width: 100px;
+  width: 70px;
   padding-top: 50px;
   height: 100vh;
-  margin-top: 100px;
-  background-image: url(./image1.jpg);
- 
-  background-size: cover;
+  margin-top: 68px;
+  background-color: #2D3E50;
   position: fixed;
   top: 0;
   left: 0;
@@ -18,6 +17,36 @@
   overflow: hidden;
 }
 
+/* Sidebar Buttons */
+.sidebar-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+  font-size: 1.8rem;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  margin-bottom: 15px;
+  border: none;
+  background: none;
+  color: white;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.sidebar-button:focus, .sidebar-button:active {
+  outline: none; /* Removes default focus outline */
+  border: 2px solid white; /* Adds white border when clicked */
+}
+
+/* Sidebar Button hover effect */
+.sidebar-button:hover {
+  transform: translateX(5px); /* Slight hover animation */
+}
+
+
 /* Sidebar buttons */
 .sidebar-button {
   display: flex;
@@ -28,7 +57,7 @@
   width: 60px; /* Fixed size for buttons */
   height: 60px; /* Fixed height for consistent look */
   text-align: center;
-  margin-bottom: 15px; /* Space between buttons *//* Sidebar Container */
+  margin-bottom: 15px; /* Space between buttons // Sidebar Container */
 .sidebar {
   width: 100px;
   padding-top: 50px;
