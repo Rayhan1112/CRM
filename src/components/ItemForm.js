@@ -137,28 +137,34 @@ function ItemForm({ onAddItem }) {
         const sheetName = wb.SheetNames[0];
         const sheet = wb.Sheets[sheetName];
         let data = XLSX.utils.sheet_to_json(sheet);
-
-        // Filter out empty rows
-        data = data.filter(
-          (row) => Object.values(row).some((value) => value !== null && value !== undefined && value !== "")
+  
+        // Filter out rows with entirely empty values
+        data = data.filter((row) =>
+          Object.values(row).some(
+            (value) => value !== null && value !== undefined && value.toString().trim() !== ""
+          )
         );
-
-        setImportedData(data);
-        setShowPopup(true);
+  
+        if (data.length > 0) {
+          setImportedData(data);
+          setShowPopup(true);
+        } else {
+          alert("The uploaded file does not contain valid data. Please check the file and try again.");
+        }
       };
       reader.readAsBinaryString(file);
     }
   };
-
+  
   const handleBulkSubmit = async () => {
     setLoading(true);
-
+  
     if (importedData.length === 0) {
       alert("No data to submit. Please upload a valid file first.");
       setLoading(false);
       return;
     }
-
+  
     try {
       const response = await fetch("http://localhost:5000/api/leads", {
         method: "POST",
@@ -167,16 +173,18 @@ function ItemForm({ onAddItem }) {
         },
         body: JSON.stringify(importedData),
       });
-
+  
       if (!response.ok) {
         throw new Error("Failed to submit leads");
       }
-
+  
       setImportedData([]);
       setShowPopup(false);
       alert("Data submitted successfully!");
+      console.log(importedData);
     } catch (error) {
       console.error("Error:", error);
+      alert("An error occurred while submitting data. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -452,80 +460,79 @@ function ItemForm({ onAddItem }) {
       </div>
 
       {/* Excel Data Popup */}
-      {showPopup && (
-        <>
-          <div style={overlayStyle} onClick={closePopup}></div>
-          <div style={popupStyle}>
-            <h3 style={{ textAlign: "center" }}>Imported Excel Data</h3>
-            <table style={{ width: "100%", borderCollapse: "collapse" }}>
-              <thead>
-                <tr>
-                  {Object.keys(importedData[0] || {}).map((key) => (
-                    <th
-                      key={key}
-                      style={{
-                        border: "1px solid #ddd",
-                        padding: "8px",
-                        backgroundColor: "#f2f2f2",
-                      }}
-                    >
-                      {key}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {importedData.map((row, index) => (
-                  <tr key={index}>
-                    {Object.values(row).map((value, idx) => (
-                      <td
-                        key={idx}
-                        style={{
-                          border: "1px solid #ddd",
-                          padding: "8px",
-                        }}
-                      >
-                        {value}
-                      </td>
-                    ))}
-                  </tr>
+      {
+  showPopup && importedData.length > 0 && (
+    <>
+      <div style={overlayStyle} onClick={closePopup}></div>
+      <div style={popupStyle}>
+        <h3 style={{ textAlign: "center" }}>Imported Excel Data</h3>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr>
+              {Object.keys(importedData[0]).map((key) => (
+                <th
+                  key={key}
+                  style={{
+                    border: "1px solid #ddd",
+                    padding: "8px",
+                    backgroundColor: "#f2f2f2",
+                  }}
+                >
+                  {key}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {importedData.map((row, index) => (
+              <tr key={index}>
+                {Object.values(row).map((value, idx) => (
+                  <td
+                    key={idx}
+                    style={{
+                      border: "1px solid #ddd",
+                      padding: "8px",
+                    }}
+                  >
+                    {value}
+                  </td>
                 ))}
-              </tbody>
-            </table>
-            <button
-  style={{
-    marginTop: "20px",
-    padding: "10px 20px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-  }}
-  onClick={handleBulkSubmit}
-  disabled={loading}
->
-  {loading ? "Submitting..." : "Submit Excel Data"}
-</button>
-
-<button
-  style={{
-    marginTop: "20px", // Same marginTop to align both buttons
-    padding: "10px 20px",
-    backgroundColor: "red", // Red color for the button
-    color: "white", // White text color
-    border: "none",
-    borderRadius: "8px",
-    cursor: "pointer",
-    marginLeft: "10px", // Adds space between buttons
-  }}
-  onClick={closePopup}
->
-  Cancel
-</button>
-
-          </div>
-        </>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <button
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+          }}
+          onClick={handleBulkSubmit}
+          disabled={loading}
+        >
+          {loading ? "Submitting..." : "Submit Excel Data"}
+        </button>
+        <button
+          style={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            backgroundColor: "red",
+            color: "white",
+            border: "none",
+            borderRadius: "8px",
+            cursor: "pointer",
+            marginLeft: "10px",
+          }}
+          onClick={closePopup}
+        >
+          Cancel
+        </button>
+      </div>
+    </>
       )}
     </div>
   );

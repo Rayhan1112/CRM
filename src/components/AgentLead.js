@@ -116,18 +116,19 @@
 
 // export default AgentLead;
 import React, { useState } from 'react';
-import axios from 'axios';
+import { getDatabase, ref, push } from "firebase/database";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import database from '../firebaseConfig'; // Adjust the path if necessary
 
 function AgentLead() {
   const [formData, setFormData] = useState({
-    id: '', // Field for ID
+    id: '',
     name: '',
     email: '',
-    password: '', 
+    password: '',
     leadStatus: 'New Lead',
-    assignedLeads: '', 
+    assignedLeads: '',
   });
 
   const handleChange = (e) => {
@@ -139,10 +140,9 @@ function AgentLead() {
     e.preventDefault();
 
     try {
-      // Adjust the endpoint to match your new server setup
-      const response = await axios.post('http://localhost:5000/api/agents', formData);
+      const dbRef = ref(database, 'AgentList'); // Reference to 'AgentList' root
+      await push(dbRef, formData); // Push data to Firebase
       alert('Agent lead added successfully!');
-      console.log(response.data);
       setFormData({ id: '', name: '', email: '', password: '', leadStatus: 'New Lead', assignedLeads: '' }); // Reset form
     } catch (error) {
       console.error('Error adding agent lead:', error);
@@ -233,3 +233,4 @@ function AgentLead() {
 }
 
 export default AgentLead;
+
