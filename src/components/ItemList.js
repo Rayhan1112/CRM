@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { getDatabase, ref, get } from "firebase/database"; // Import Firebase Realtime Database methods
-import database from "../firebaseConfig"; // Firebase configuration file
+import { getDatabase, ref, get, remove } from "firebase/database";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -8,38 +7,47 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Pagination from "react-bootstrap/Pagination";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as XLSX from "xlsx";
-import { MdOutlineSms } from "react-icons/md";
-import { FaWhatsappSquare } from "react-icons/fa";
-import { MdAddIcCall } from "react-icons/md";
+import {
+  MdOutlineSms,
+  MdAddIcCall,
+  MdAssignmentAdd,
+  MdEditSquare,
+  MdOutlineCreateNewFolder,
+} from "react-icons/md";
+import { FaWhatsappSquare, FaFileExcel, FaSearch } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineFilter } from "react-icons/ai";
-import { MdAssignmentAdd } from "react-icons/md";
-import { MdEditSquare } from "react-icons/md";
-import { MdOutlineCreateNewFolder } from "react-icons/md";
-import { FaFileExcel } from "react-icons/fa";
-import { FaSearch } from "react-icons/fa";
-import "@fontsource/lexend-deca"; // Defaults to weight 400
-import "./styles.css"; // Import the external CSS
+import "@fontsource/lexend-deca";
+import "./styles.css";
 
 function ItemList() {
   const [items, setItems] = useState([]);
   const [filteredField, setFilteredField] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1); // Current page
-  const itemsPerPage = 5; // Number of items per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
+  // Fetch data from Firebase
   useEffect(() => {
-    // Fetch leads data from Firebase Realtime Database
     const fetchItems = async () => {
       try {
-        const dbRef = ref(database, "LeadList"); // Reference to the "leads" node in Firebase Realtime Database
-        const snapshot = await get(dbRef); // Fetch the data
+        const dbRef = ref(getDatabase(), "LeadList");
+        const snapshot = await get(dbRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
           const leadsArray = Object.keys(data).map((key) => ({
-            id: key, // Adding the key to each item to uniquely identify it
-            ...data[key],
+            id: key,
+            name: data[key]?.name || "N/A",
+            phone: data[key]?.phone || "N/A",
+            email: data[key]?.email || "N/A",
+            vehicleModel: data[key]?.vehicleModel || "N/A",
+            regNumber: data[key]?.regNumber || "N/A",
+            policyStart: data[key]?.policyStart || "N/A",
+            policyExpiry: data[key]?.policyExpiry || "N/A",
+            currentProvider: data[key]?.currentProvider || "N/A",
+            premium: data[key]?.premium || "N/A",
+            leadStatus: data[key]?.leadStatus || "New",
           }));
-          setItems(leadsArray); // Set the leads data in state
+          setItems(leadsArray);
         } else {
           console.log("No leads available.");
         }
@@ -51,7 +59,44 @@ function ItemList() {
     fetchItems();
   }, []);
 
+  // Handle file upload and fetch data from Excel
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const fileData = await file.arrayBuffer();
+      const workbook = XLSX.read(fileData, { type: "array" });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const excelData = XLSX.utils.sheet_to_json(worksheet);
+
+      const excelLeads = excelData.map((row, index) => ({
+        id: `excel-${index}`, // Assign unique IDs for Excel data
+        name: row["name"] || "N/A",
+        phone: row["phone"] || "N/A",
+        email: row["email"] || "N/A",
+        vehicleModel: row["vehicleModel"] || "N/A",
+        regNumber: row["regNumber"] || "N/A",
+        policyStart: row["policyStart"] || "N/A",
+        policyExpiry: row["policyExpiry"] || "N/A",
+        currentProvider: row["currentProvider"] || "N/A",
+        premium: row["premium"] || "N/A",
+        leadStatus: row["leadStatus"] || "New Lead",
+      }));
+
+      setItems((prevItems) => [...prevItems, ...excelLeads]);
+    } catch (error) {
+      console.error("Error reading Excel file:", error.message);
+    }
+  };
+
+  // Export data to Excel
   const exportToExcel = () => {
+    if (items.length === 0) {
+      alert("No data to export.");
+      return;
+    }
+
     const formattedData = items.map((item) => ({
       Name: item.name,
       Phone: item.phone,
@@ -71,16 +116,23 @@ function ItemList() {
     XLSX.writeFile(wb, "LeadsData.xlsx");
   };
 
+  // Handle sorting/filtering
   const handleSort = (field) => {
     setFilteredField(field);
   };
 
+  // Handle deletion of a lead
   const handleDelete = async (id) => {
-    // Add Firebase delete logic here if needed, or use a REST API if required for deletion
-    console.log("Delete item with id:", id);
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id)); // Remove item locally from the state
+    try {
+      const dbRef = ref(getDatabase(), `LeadList/${id}`);
+      await remove(dbRef);
+      setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting lead: ", error.message);
+    }
   };
 
+  // Table headers configuration
   const headers = {
     Name: ["Name"],
     Phone: ["Phone"],
@@ -101,8 +153,7 @@ function ItemList() {
     ],
   };
 
-  const selectedHeaders = headers[filteredField] || [];
-
+  const selectedHeaders = headers[filteredField] || headers.All;
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
