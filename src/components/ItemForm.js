@@ -1,4 +1,23 @@
 
+// import React, { useState } from "react";
+// import { getDatabase, ref, push, set } from "firebase/database";
+// import * as XLSX from "xlsx";
+// import database from "../firebaseConfig"; // Assuming you have exported the Firebase instance in this file
+
+// function ItemForm({ onAddItem }) {
+//   const [name, setName] = useState("");
+//   const [phone, setPhone] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [vehicleModel, setVehicleModel] = useState("");
+//   const [regNumber, setRegNumber] = useState("");
+//   const [policyStart, setPolicyStart] = useState("");
+//   const [policyExpiry, setPolicyExpiry] = useState("");
+//   const [currentProvider, setCurrentProvider] = useState("");
+//   const [premium, setPremium] = useState("");
+//   const [leadStatus, setLeadStatus] = useState("New Lead");
+//   const [importedData, setImportedData] = useState([]);
+//   const [showPopup, setShowPopup] = useState(false);
+//   const [loading, setLoading] = useState(false);
 import React, { useState } from "react";
 import { getDatabase, ref, push, set } from "firebase/database";
 import * as XLSX from "xlsx";
@@ -144,6 +163,118 @@ const buttonStyle = {
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 999,
   };
+  // const handleFileUpload = (e) => {
+  //   const file = e.target.files[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onload = (event) => {
+  //       const binaryStr = event.target.result;
+  //       const wb = XLSX.read(binaryStr, { type: "binary" });
+  //       const sheetName = wb.SheetNames[0];
+  //       const sheet = wb.Sheets[sheetName];
+  //       let data = XLSX.utils.sheet_to_json(sheet);
+
+  //       // Filter out rows with entirely empty values
+  //       data = data.filter((row) =>
+  //         Object.values(row).some(
+  //           (value) => value !== null && value !== undefined && value.toString().trim() !== ""
+  //         )
+  //       );
+
+  //       if (data.length > 0) {
+  //         setImportedData(data);
+  //         setShowPopup(true);
+  //       } else {
+  //         alert("The uploaded file does not contain valid data. Please check the file and try again.");
+  //       }
+  //     };
+  //     reader.readAsBinaryString(file);
+  //   }
+  // };
+
+  // const handleBulkSubmit = async () => {
+  //   setLoading(true);
+
+  //   if (importedData.length === 0) {
+  //     alert("No data to submit. Please upload a valid file first.");
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   try {
+  //     const db = getDatabase();
+  //     const leadsRef = ref(db, "LeadList");
+
+  //     importedData.forEach((lead) => {
+  //       const newLeadRef = push(leadsRef);
+  //       set(newLeadRef, lead);
+  //     });
+
+  //     setImportedData([]);
+  //     setShowPopup(false);
+  //     alert("Data submitted successfully!");
+  //   } catch (error) {
+  //     console.error("Error submitting data: ", error);
+  //     alert("An error occurred while submitting data. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const handleFormSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   const leadData = {
+  //     name,
+  //     phone,
+  //     email,
+  //     vehicleModel,
+  //     regNumber,
+  //     policyStart,
+  //     policyExpiry,
+  //     currentProvider,
+  //     premium,
+  //     leadStatus,
+  //   };
+
+  //   try {
+  //     const db = getDatabase();
+  //     const leadsRef = ref(db, "LeadList");
+  //     const newLeadRef = push(leadsRef);
+  //     await set(newLeadRef, leadData);
+
+  //     alert("Lead submitted successfully!");
+  //     setName("");
+  //     setPhone("");
+  //     setEmail("");
+  //     setVehicleModel("");
+  //     setRegNumber("");
+  //     setPolicyStart("");
+  //     setPolicyExpiry("");
+  //     setCurrentProvider("");
+  //     setPremium("");
+  //     setLeadStatus("New Lead");
+  //   } catch (error) {
+  //     console.error("Error submitting lead: ", error);
+  //     alert("An error occurred. Please try again.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+  // const closePopup = () => {
+  //   setShowPopup(false);
+  // };
+  const sanitizeKeys = (data) => {
+    const sanitizedData = {};
+    Object.keys(data).forEach((key) => {
+      const sanitizedKey = key.replace(/[.#$/[\]]/g, "_");
+      sanitizedData[sanitizedKey] = data[key];
+    });
+    return sanitizedData;
+  };
+
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -163,7 +294,9 @@ const buttonStyle = {
         );
 
         if (data.length > 0) {
-          setImportedData(data);
+          // Sanitize all rows
+          const sanitizedData = data.map(sanitizeKeys);
+          setImportedData(sanitizedData);
           setShowPopup(true);
         } else {
           alert("The uploaded file does not contain valid data. Please check the file and try again.");
@@ -187,8 +320,9 @@ const buttonStyle = {
       const leadsRef = ref(db, "LeadList");
 
       importedData.forEach((lead) => {
+        const sanitizedLead = sanitizeKeys(lead);
         const newLeadRef = push(leadsRef);
-        set(newLeadRef, lead);
+        set(newLeadRef, sanitizedLead);
       });
 
       setImportedData([]);
@@ -223,7 +357,7 @@ const buttonStyle = {
       const db = getDatabase();
       const leadsRef = ref(db, "LeadList");
       const newLeadRef = push(leadsRef);
-      await set(newLeadRef, leadData);
+      await set(newLeadRef, sanitizeKeys(leadData)); // Sanitize keys before submission
 
       alert("Lead submitted successfully!");
       setName("");
