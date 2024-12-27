@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { getDatabase, ref, push, set } from "firebase/database";
 import * as XLSX from "xlsx";
 import database from "../firebaseConfig"; // Assuming you have exported the Firebase instance in this file
+import Swal from 'sweetalert2';
 
 function ItemForm({ onAddItem }) {
   const [name, setName] = useState("");
@@ -45,10 +46,8 @@ const previewStyle = {
   fontFamily: 'Lexend Deca ',
   flex: 1,
   background: 'white',
-  border: '1px solid #ccc',
   borderRadius: '8px',
   padding: '20px',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
   backdropFilter: 'blur(5px)',
 };
 
@@ -179,7 +178,13 @@ const buttonStyle = {
           setImportedData(sanitizedData);
           setShowPopup(true);
         } else {
-          alert("The uploaded file does not contain valid data. Please check the file and try again.");
+          Swal.fire({
+            title: 'Error!',
+            text: 'The uploaded file does not contain valid data. Please check the file and try again..',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          });
+        
         }
       };
       reader.readAsBinaryString(file);
@@ -190,7 +195,12 @@ const buttonStyle = {
     setLoading(true);
 
     if (importedData.length === 0) {
-      alert("No data to submit. Please upload a valid file first.");
+      Swal.fire({
+        title: 'Error!',
+        text: 'No data to submit. Please upload a valid file first.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
       setLoading(false);
       return;
     }
@@ -207,8 +217,12 @@ const buttonStyle = {
 
       setImportedData([]);
       setShowPopup(false);
-      alert("Data submitted successfully!");
-    } catch (error) {
+      Swal.fire({
+        title: 'Success!',
+        text: 'Data Submitted Successfully',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });    } catch (error) {
       console.error("Error submitting data: ", error);
       alert("An error occurred while submitting data. Please try again.");
     } finally {
@@ -239,7 +253,12 @@ const buttonStyle = {
       const newLeadRef = push(leadsRef);
       await set(newLeadRef, sanitizeKeys(leadData)); // Sanitize keys before submission
 
-      alert("Lead submitted successfully!");
+      Swal.fire({
+        title: 'Success!',
+        text: 'Lead Added',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });      
       setName("");
       setPhone("");
       setEmail("");
@@ -322,7 +341,7 @@ const buttonStyle = {
                 <input type="text" id="reg-number" value={regNumber} onChange={(e) => setRegNumber(e.target.value)} required style={inputStyle} />
               </div>
               <div style={inputWrapperStyle}>
-                <label            style={labelStyle} htmlFor="policy-start">Policy Start Date:</label>
+                <label           style={labelStyle} htmlFor="policy-start">Policy Start Date:</label>
                 <input
                   type="date"
                   id="policy-start"
@@ -410,43 +429,43 @@ const buttonStyle = {
             <h5 className="card-title" style={titleStyle}>Lead Preview</h5>
             <p>
               <strong>Name:</strong>{' '}
-              <span style={animatedTextStyle}>{name || 'Type Name...'}</span>
+              <span style={animatedTextStyle}>{name || ''}</span>
             </p>
             <p>
               <strong>Phone:</strong>{' '}
-              <span style={animatedTextStyle}>{phone || 'Type Phone...'}</span>
+              <span style={animatedTextStyle}>{phone || ''}</span>
             </p>
             <p>
               <strong>Email:</strong>{' '}
-              <span style={animatedTextStyle}>{email || 'Type Email...'}</span>
+              <span style={animatedTextStyle}>{email || ''}</span>
             </p>
             <p>
               <strong>Vehicle Model:</strong>{' '}
-              <span style={animatedTextStyle}>{vehicleModel || 'Type Vehicle Model...'}</span>
+              <span style={animatedTextStyle}>{vehicleModel || ''}</span>
             </p>
             <p>
               <strong>Registration No:</strong>{' '}
-              <span style={animatedTextStyle}>{regNumber || 'Type Registration No...'}</span>
+              <span style={animatedTextStyle}>{regNumber || ''}</span>
             </p>
             <p>
               <strong>Policy Start Date:</strong>{' '}
-              <span style={animatedTextStyle}>{policyStart || 'Select Policy Start Date...'}</span>
+              <span style={animatedTextStyle}>{policyStart || ''}</span>
             </p>
             <p>
               <strong>Policy Expiry Date:</strong>{' '}
-              <span style={animatedTextStyle}>{policyExpiry || 'Select Policy Expiry Date...'}</span>
+              <span style={animatedTextStyle}>{policyExpiry || ''}</span>
             </p>
             <p>
               <strong>Current Provider:</strong>{' '}
-              <span style={animatedTextStyle}>{currentProvider || 'Type Current Provider...'}</span>
+              <span style={animatedTextStyle}>{currentProvider || ''}</span>
             </p>
             <p>
               <strong>Premium:</strong>{' '}
-              <span style={animatedTextStyle}>{premium || 'Enter Premium...'}</span>
+              <span style={animatedTextStyle}>{premium || ''}</span>
             </p>
             <p>
               <strong>Lead Status:</strong>{' '}
-              <span style={animatedTextStyle}>{leadStatus || 'Set Lead Status...'}</span>
+              <span style={animatedTextStyle}>{leadStatus || ''}</span>
             </p>
           </div>
         </div>

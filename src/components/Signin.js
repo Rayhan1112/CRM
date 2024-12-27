@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './SignIn.css';
 import { getDatabase, ref, get } from 'firebase/database'; // Import get along with other methods
 import  database  from '../firebaseConfig'; // Firebase configuration
+import Swal from 'sweetalert2';
 
 const SignIn = ({ onSignIn }) => {
   const [email, setEmail] = useState('');
@@ -47,7 +48,12 @@ const SignIn = ({ onSignIn }) => {
 
       if (agent) {
         onSignIn('agent'); // Trigger sign-in for agent
-        alert('Signed in as Agent!');
+         Swal.fire({
+                    title: 'Success!',
+                    text: 'Signed in as Agent!',
+                    icon: 'success',
+                    confirmButtonText: 'Ok'
+                  });
         setError('');
         setEmail('');
         setPassword('');

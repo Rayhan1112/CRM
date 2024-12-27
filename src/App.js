@@ -83,6 +83,7 @@ import OrdersPage from './components/OrdersPage';
 import AgentLead from './components/AgentLead';
 import AgentLeadList from './components/AgentLeadList';
 import WelcomePage from './components/WelcomePage'
+import InternetConnectionError from './components/InternetConnectionError';
 
 import './App.css';
 
@@ -141,6 +142,8 @@ function App() {
 
   return (
     <div className="App">
+      {/* Include the InternetConnectionError component */}
+      <InternetConnectionError />
       {isAuthenticated && <Header userType={userType} onSignOut={handleSignOut} />}
       <div className="main-content">
         {isAuthenticated && (
