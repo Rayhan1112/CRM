@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { getDatabase, ref, get, update } from "firebase/database"; // Import Firebase Realtime Database methods
+import database from "../firebaseConfig"; // Import the Firebase config
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SummaryOrders from "./SummaryOrders";
@@ -18,12 +19,18 @@ function ItemList() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/leads");
-        if (Array.isArray(response.data)) {
-          setItems(response.data);
-          calculateLeadCounts(response.data);
+        const dbRef = ref(database, "LeadList"); // Reference to the "LeadList" node in Firebase Realtime Database
+        const snapshot = await get(dbRef); // Fetch the data
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          const leadsArray = Object.keys(data).map((key) => ({
+            id: key, // Adding the key to each item to uniquely identify it
+            ...data[key],
+          }));
+          setItems(leadsArray);
+          calculateLeadCounts(leadsArray); // Calculate counts based on the retrieved leads
         } else {
-          console.error("Unexpected response data", response.data);
+          console.log("No leads available.");
         }
       } catch (error) {
         console.error("Error fetching items: ", error.message);
@@ -57,17 +64,14 @@ function ItemList() {
 
     setLoading(true);
     try {
-      const response = await axios.put(`http://localhost:5000/api/leads/${id}`, {
-        leadStatus: newStatus,
-      });
+      // Firebase logic for updating lead status
+      const leadRef = ref(database, `LeadList/${id}`); // Update specific lead
+      await update(leadRef, { leadStatus: newStatus }); // Update only the leadStatus field
 
-      const updatedLead = response.data.updatedLead;
-
-      // Update items and recalculate lead counts
+      // Update the item locally
       const updatedItems = items.map((item) =>
-        item._id === id ? { ...item, leadStatus: updatedLead.leadStatus } : item
+        item.id === id ? { ...item, leadStatus: newStatus } : item
       );
-
       setItems(updatedItems);
       calculateLeadCounts(updatedItems);
 
@@ -82,8 +86,6 @@ function ItemList() {
 
   return (
     <div className="container my-4">
-    
-
       <SummaryOrders
         interested={leadCounts.interested}
         onHold={leadCounts.onHold}
@@ -110,7 +112,7 @@ function ItemList() {
           </thead>
           <tbody>
             {items.map((item, index) => (
-              <tr key={item._id}>
+              <tr key={item.id}>
                 <td>{index + 1}</td>
                 <td>{item.name}</td>
                 <td>{item.phone}</td>
@@ -124,7 +126,7 @@ function ItemList() {
                 <td>
                   <select
                     value={item.leadStatus}
-                    onChange={(e) => handleStatusChange(item._id, e.target.value)}
+                    onChange={(e) => handleStatusChange(item.id, e.target.value)}
                     disabled={loading}
                   >
                     <option value="Interested">Interested</option>
