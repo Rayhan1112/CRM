@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getDatabase, ref, get, remove } from "firebase/database";
+import database from "../firebaseConfig";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -7,15 +8,8 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import Pagination from "react-bootstrap/Pagination";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as XLSX from "xlsx";
-import {
-  MdOutlineSms,
-  MdAddIcCall,
-  MdAssignmentAdd,
-  MdEditSquare,
-  MdOutlineCreateNewFolder,
-} from "react-icons/md";
+import { MdOutlineSms, MdAddIcCall, MdAssignmentAdd, MdEditSquare, MdOutlineCreateNewFolder } from "react-icons/md";
 import { FaWhatsappSquare, FaFileExcel, FaSearch } from "react-icons/fa";
-import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineFilter } from "react-icons/ai";
 import "@fontsource/lexend-deca";
 import "./styles.css";
@@ -24,28 +18,18 @@ function ItemList() {
   const [items, setItems] = useState([]);
   const [filteredField, setFilteredField] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [itemsPerPage] = useState(5); // Move itemsPerPage to useState for flexibility
 
-  // Fetch data from Firebase
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const dbRef = ref(getDatabase(), "LeadList");
+        const dbRef = ref(database, "LeadList");
         const snapshot = await get(dbRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
           const leadsArray = Object.keys(data).map((key) => ({
             id: key,
-            name: data[key]?.name || "N/A",
-            phone: data[key]?.phone || "N/A",
-            email: data[key]?.email || "N/A",
-            vehicleModel: data[key]?.vehicleModel || "N/A",
-            regNumber: data[key]?.regNumber || "N/A",
-            policyStart: data[key]?.policyStart || "N/A",
-            policyExpiry: data[key]?.policyExpiry || "N/A",
-            currentProvider: data[key]?.currentProvider || "N/A",
-            premium: data[key]?.premium || "N/A",
-            leadStatus: data[key]?.leadStatus || "New",
+            ...data[key],
           }));
           setItems(leadsArray);
         } else {
@@ -55,48 +39,10 @@ function ItemList() {
         console.error("Error fetching leads: ", error.message);
       }
     };
-
     fetchItems();
   }, []);
 
-  // Handle file upload and fetch data from Excel
-  const handleFileUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    try {
-      const fileData = await file.arrayBuffer();
-      const workbook = XLSX.read(fileData, { type: "array" });
-      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-      const excelData = XLSX.utils.sheet_to_json(worksheet);
-
-      const excelLeads = excelData.map((row, index) => ({
-        id: `excel-${index}`, // Assign unique IDs for Excel data
-        name: row["name"] || "N/A",
-        phone: row["phone"] || "N/A",
-        email: row["email"] || "N/A",
-        vehicleModel: row["vehicleModel"] || "N/A",
-        regNumber: row["regNumber"] || "N/A",
-        policyStart: row["policyStart"] || "N/A",
-        policyExpiry: row["policyExpiry"] || "N/A",
-        currentProvider: row["currentProvider"] || "N/A",
-        premium: row["premium"] || "N/A",
-        leadStatus: row["leadStatus"] || "New Lead",
-      }));
-
-      setItems((prevItems) => [...prevItems, ...excelLeads]);
-    } catch (error) {
-      console.error("Error reading Excel file:", error.message);
-    }
-  };
-
-  // Export data to Excel
   const exportToExcel = () => {
-    if (items.length === 0) {
-      alert("No data to export.");
-      return;
-    }
-
     const formattedData = items.map((item) => ({
       Name: item.name,
       Phone: item.phone,
@@ -116,23 +62,21 @@ function ItemList() {
     XLSX.writeFile(wb, "LeadsData.xlsx");
   };
 
-  // Handle sorting/filtering
+  const handleDelete = async (id) => {
+    try {
+      const itemRef = ref(database, `LeadList/${id}`);
+      await remove(itemRef);
+      setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+      console.log(`Lead with id: ${id} has been deleted.`);
+    } catch (error) {
+      console.error("Error deleting lead:", error.message);
+    }
+  };
+
   const handleSort = (field) => {
     setFilteredField(field);
   };
 
-  // Handle deletion of a lead
-  const handleDelete = async (id) => {
-    try {
-      const dbRef = ref(getDatabase(), `LeadList/${id}`);
-      await remove(dbRef);
-      setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    } catch (error) {
-      console.error("Error deleting lead: ", error.message);
-    }
-  };
-
-  // Table headers configuration
   const headers = {
     Name: ["Name"],
     Phone: ["Phone"],
@@ -153,8 +97,8 @@ function ItemList() {
     ],
   };
 
-  const selectedHeaders = headers[filteredField] || headers.All;
-  // Pagination logic
+  const selectedHeaders = headers[filteredField] || [];
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
@@ -175,11 +119,10 @@ function ItemList() {
             <input
               type="text"
               className="form-control"
-              placeholder="Search Name , Phone"
-              aria-label="Recipient's username"
-              aria-describedby="basic-addon2"
+              placeholder="Search Name, Phone"
+              aria-label="Search Name, Phone"
             />
-            <span className="input-group-text" id="basic-addon2">
+            <span className="input-group-text">
               <FaSearch />
             </span>
           </div>
@@ -217,7 +160,10 @@ function ItemList() {
       <div className="table-container" style={{ overflowX: "auto" }}>
         {items.length > 0 ? (
           <>
-            <Table className="table" style={{ minWidth: "1500px" }}>
+            <Table
+              className="table"
+              style={{ minWidth: "1500px" }}
+            >
               <thead>
                 <tr>
                   <th colSpan={selectedHeaders.length + 1}>
@@ -273,25 +219,21 @@ function ItemList() {
                     {selectedHeaders.includes("Lead Status") && <td>{item.leadStatus}</td>}
                     {selectedHeaders.includes("Social Media") && (
                       <td>
-                        <Button variant="outline-primary" style={{ marginLeft: "10px" }}>
-                          <MdOutlineSms />
-                        </Button>
-                        <Button variant="outline-success" style={{ marginLeft: "10px" }}>
-                          <FaWhatsappSquare />
-                        </Button>
-                        <Button variant="outline-info" style={{ marginLeft: "10px" }}>
-                          <MdAddIcCall />
-                        </Button>
+                        <a href="#" style={{ textDecoration: "none", color: "red" }}>
+                          <MdOutlineSms style={{ fontSize: "20px", marginRight: "4px" }} />
+                        </a>
+                        <a href="#">
+                          <MdAddIcCall style={{ fontSize: "20px", marginRight: "0px" }} />
+                        </a>
+                        <a href="#" style={{ textDecoration: "none", color: "green" }}>
+                          <FaWhatsappSquare style={{ fontSize: "20px", marginLeft: "4px" }} />
+                        </a>
                       </td>
                     )}
                     {selectedHeaders.includes("Delete") && (
                       <td>
-                        <Button
-                          onClick={() => handleDelete(item.id)}
-                          variant="danger"
-                          style={{ marginLeft: "10px" }}
-                        >
-                          <BsThreeDots />
+                        <Button variant="danger" size="sm" onClick={() => handleDelete(item.id)}>
+                          Delete
                         </Button>
                       </td>
                     )}
@@ -299,18 +241,16 @@ function ItemList() {
                 ))}
               </tbody>
             </Table>
-
-            {/* Pagination */}
             <Pagination>
-              {[...Array(totalPages)].map((_, index) => (
-                <Pagination.Item key={index + 1} onClick={() => handlePageChange(index + 1)}>
+              {Array.from({ length: totalPages }, (_, index) => (
+                <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => handlePageChange(index + 1)}>
                   {index + 1}
                 </Pagination.Item>
               ))}
             </Pagination>
           </>
         ) : (
-          <p>No leads available</p>
+          <p className="text-center">No leads available for now</p>
         )}
       </div>
     </div>
