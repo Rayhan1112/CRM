@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { getDatabase, ref, get } from "firebase/database";
 import { Table } from 'react-bootstrap';
@@ -40,7 +42,7 @@ function AgentLeadList() {
             <th>Name</th>
             <th>Email</th>
             <th>Password</th>
-            <th>Lead Status</th>
+            <th>Agent Status</th>
             <th>Assigned Leads</th>
           </tr>
         </thead>
@@ -52,8 +54,12 @@ function AgentLeadList() {
                 <td>{agent.name}</td>
                 <td>{agent.email}</td>
                 <td>{agent.password}</td>
-                <td>{agent.leadStatus}</td>
-                <td>{agent.assignedLeads}</td>
+                <td>{agent.agentLead || 'Not Available'}</td> {/* Corrected 'agentlead' to 'agentLead' */}
+                <td>
+                  {Array.isArray(agent.assignedLeads) 
+                    ? agent.assignedLeads.join(', ') 
+                    : agent.assignedLeads || 'None'}
+                </td>
               </tr>
             ))
           ) : (

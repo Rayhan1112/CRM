@@ -1,0 +1,230 @@
+/* .agent-lead-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 20px;
+  }
+  
+  .form-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  .preview-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  h2, h3 {
+    text-align: center;
+  }
+  
+  .preview-container p {
+    font-size: 1.2em;
+  }
+  
+  button {
+    margin-top: 10px;
+  } */
+  
+/* ........................ */
+/* 
+  .agent-lead-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 20px;
+  }
+  
+  .form-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .preview-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f4f7fb; 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); 
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .preview-container:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); 
+  }
+  
+  h2, h3 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+  }
+  
+  .preview-container p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #555;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .preview-container p strong {
+    color: #333;
+  }
+  
+  button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #c9302c; 
+  }
+  
+  
+  @media (max-width: 768px) {
+    .agent-lead-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+  } */
+  
+
+  /*3 .................................... */
+
+
+  .agent-lead-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin: 20px;
+    flex-wrap: wrap; /* Ensures elements wrap in smaller screens */
+  }
+  
+  .form-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Improved shadow */
+    max-width: 45%; /* Adjust width for better space usage */
+    height: auto; /* Allow form container to adjust based on content */
+  }
+  
+  .preview-container {
+    flex: 1;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f4f7fb; /* Soft blue background */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1); /* Improved shadow */
+    transition: box-shadow 0.3s ease-in-out;
+    max-width: 45%; /* Adjust width to prevent it from overflowing */
+    height: 350px; 
+    margin-top: 20px; /* Added gap from the top */
+    font-family: 'Lexend Deca', sans-serif; /* Apply custom font */
+    background: white; /* White background for preview container */
+    backdrop-filter: blur(5px); /* Apply blur effect */
+  }
+  
+  .preview-container:hover {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Enhanced hover effect with stronger shadow */
+  }
+  
+  .preview-container .card {
+    margin-top: 20px;
+    background: #F8FAFC;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    padding: 10px;
+  }
+  
+  h2, h3 {
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  h3 {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: black;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2); /* Apply title style */
+  }
+  
+  .preview-container p {
+    font-size: 1.1em;
+    margin-bottom: 12px;
+    color: #555;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .preview-container p strong {
+    color: black;
+  }
+  
+  .preview-container p.animated-text {
+    font-size: 16px;
+    color: black;
+    font-weight: bold;
+    animation: fadeIn 1s ease-in-out;
+    text-shadow: 0 1px 3px rgba(0, 123, 255, 0.5); /* Apply animated text style */
+  }
+  
+  button {
+    margin-top: 15px;
+    padding: 12px 22px;
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  button:hover {
+    background-color: #c9302c; /* Darker red on hover */
+  }
+  
+  /* Optional: Make the layout responsive on smaller screens */
+  @media (max-width: 768px) {
+    .agent-lead-container {
+      flex-direction: column;
+      gap: 20px;
+    }
+  
+    .form-container, .preview-container {
+      max-width: 100%; /* Ensure both take full width on small screens */
+    }
+  }
+  
+  /* Keyframes for fadeIn animation */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
