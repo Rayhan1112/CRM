@@ -27,7 +27,7 @@ function MainAdminComponent({ userType }) {
   };
 
   return (
-    <div className="main-admin-container">
+    <div className="main-admin-container" >
       <Sidebar setActiveSection={setActiveSection} />
       <div className="main-content">{renderSection()}</div>
     </div>

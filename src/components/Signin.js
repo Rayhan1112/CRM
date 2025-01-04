@@ -1,7 +1,9 @@
+
+
 import React, { useState, useEffect } from 'react';
 import './SignIn.css';
 import { getDatabase, ref, get } from 'firebase/database'; // Import get along with other methods
-import  database  from '../firebaseConfig'; // Firebase configuration
+import database from '../firebaseConfig'; // Firebase configuration
 import Swal from 'sweetalert2';
 
 const SignIn = ({ onSignIn }) => {
@@ -47,17 +49,25 @@ const SignIn = ({ onSignIn }) => {
       );
 
       if (agent) {
-        onSignIn('agent'); // Trigger sign-in for agent
-         Swal.fire({
-                    title: 'Success!',
-                    text: 'Signed in as Agent!',
-                    icon: 'success',
-                    confirmButtonText: 'Ok'
-                  });
-        setError('');
-        setEmail('');
-        setPassword('');
+        // Check if the agent's status is 'active'
+        if (agent.agentLead === 'Active') {
+          // If the agent is active, proceed to sign in
+          onSignIn('agent'); // Trigger sign-in for active agent
+          Swal.fire({
+            title: 'Success!',
+            text: 'Signed in as Agent!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          });
+          setError('');
+          setEmail('');
+          setPassword('');
+        } else {
+          // If the agent is inactive, show an error message
+          setError('Your account is inactive. Please contact support.');
+        }
       } else {
+        // If no agent found or invalid credentials
         setError('Invalid agent credentials, please try again.');
       }
     } else {
@@ -94,7 +104,7 @@ const SignIn = ({ onSignIn }) => {
             </button>
             <button
               type="button"
-              className={`toggle-btn $userType === 'agent' ? 'active' : ''}`}
+              className={`toggle-btn ${userType === 'agent' ? 'active' : ''}`}
               onClick={() => {
                 setUserType('agent');
                 setError(''); // Reset error when switching user type
@@ -129,3 +139,7 @@ const SignIn = ({ onSignIn }) => {
 };
 
 export default SignIn;
+
+
+
+

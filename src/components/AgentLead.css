@@ -115,6 +115,7 @@
     gap: 30px;
     margin: 20px;
     flex-wrap: wrap; /* Ensures elements wrap in smaller screens */
+    margin-left: -40px;
   }
   
   .form-container {
