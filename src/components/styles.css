@@ -63,6 +63,9 @@
 }
 
 @media (max-width: 768px) {
+  .container{
+    margin-left: -40px;
+  }
   /* Mobile responsiveness for action bar */
   .action-bar {
     flex-direction: column;
@@ -87,6 +90,9 @@
 }
 
 @media (max-width: 576px) {
+  .container{
+    margin-left: -40px;
+  }
   .input-group .form-control {
     padding: 10px 15px;
     font-size: 14px;
