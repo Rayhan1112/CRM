@@ -111,11 +111,12 @@ function App() {
     setUserType(null);
     setActiveSection(""); 
   };
+  if (!isAuthenticated) {
+    return <SignIn onSignIn={handleSignIn} />;
+  }
 
   const renderSection = () => {
-    if (!isAuthenticated) {
-      return <SignIn onSignIn={handleSignIn} />;
-    }
+   
 
     switch (activeSection) {
       case "welcome":
@@ -142,6 +143,7 @@ function App() {
 
   return (
     <div className="App">
+    
       {/* Include the InternetConnectionError component */}
       <InternetConnectionError />
       {isAuthenticated && <Header userType={userType} onSignOut={handleSignOut} />}

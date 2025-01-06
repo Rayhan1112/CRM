@@ -152,7 +152,7 @@ form .toggle-btn:focus {
 } */
 .signin-page {
   background: url('./background3.jpg') no-repeat center center fixed;
-  background-size: cover;
+  background-size:auto;
   min-height: 100vh;
   display: flex;
   justify-content: center;

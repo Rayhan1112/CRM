@@ -1,6 +1,6 @@
 
 .sidebar {
-  width: 70px;
+  width: 85px;
   padding-top: 50px;
   height: 100vh;
   margin-top: 68px;
@@ -130,6 +130,7 @@
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
+  
   transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 

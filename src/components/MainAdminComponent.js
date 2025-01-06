@@ -17,7 +17,7 @@ function MainAdminComponent({ userType }) {
         case "orders":
           return <OrdersPage />;
         case "agentLead":
-          return <AgentLead />;
+          return <OrdersPage />;
         default:
           return <h3>Welcome, Admin!</h3>;
       }
