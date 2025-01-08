@@ -1,7 +1,6 @@
 /* General container styling */
 .container {
-  margin: 20px;
-  padding: 10px;
+  
   margin-left: -40px;
 }
 
@@ -11,7 +10,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
-  padding: 20px;
+ 
   background-color: #f8f9fa;
   flex-wrap: wrap; /* Ensures items wrap on smaller screens */
 }
@@ -63,35 +62,64 @@
 }
 
 @media (max-width: 768px) {
-  .container{
-    margin-left: -40px;
+
+  .container {
+    width: 100%;
+   
+   
+
   }
-  /* Mobile responsiveness for action bar */
+ 
+
+  /* Other styles remain unchanged */
   .action-bar {
     flex-direction: column;
     gap: 15px;
+  width: auto;
+   margin-left: -30px;
+    
+  }
+  .table-container{
+    width: auto;
+    margin-left: -30px;
   }
 
   .dropdown-buttons {
-    flex-direction: column;  /* Stack the dropdown buttons vertically on smaller screens */
+    display:flex ; /* Align dropdowns horizontally */
+    justify-content: space-between; /* Space dropdowns evenly */
+    flex-wrap: nowrap; /* Ensure dropdowns stay in one row */
+    gap: 10px; /* Add spacing between dropdowns */
+    flex-direction:column;
   }
 
   .dropdown-buttons .dropdown-button {
-    width: 100%; /* Stack buttons on mobile */
-    margin-bottom: 10px; /* Add space between buttons */
+    
+    width: 100%;
+    margin-bottom: 10px;
   }
 
-  /* Move the search bar to the top on mobile */
   .input-group {
-    order: -1;  /* Ensures search bar comes before other elements */
-    width: 100%;
+    order: -1; /* Moves the search bar to the top */
+    width: 100%; /* Full width of the container */
     max-width: 100%;
+    margin-bottom: 15px; /* Space below the search bar */
   }
 }
 
+
 @media (max-width: 576px) {
-  .container{
-    margin-left: -40px;
+  
+  .action-bar {
+    flex-direction: column;
+    gap: 15px;
+   padding: 0%;
+   width: 360px;
+   margin-left: -30px;
+    
+  }
+  .table-container{
+    width: 360px;
+    margin-left: -30px;
   }
   .input-group .form-control {
     padding: 10px 15px;
