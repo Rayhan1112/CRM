@@ -2,7 +2,6 @@
     width: 100%;
     max-width: 1400px;
     margin: 0;
-    padding: 15px;
     position: relative;
     left: -40px; /* Align content to the left with a -40px offset */
   }
@@ -28,6 +27,7 @@
   
   /* Responsive font size */
   @media (max-width: 768px) {
+    
     .table {
       font-size: 0.9rem;
     }

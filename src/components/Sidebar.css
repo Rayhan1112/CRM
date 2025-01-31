@@ -1,4 +1,8 @@
-
+/* Styling for the content area (where main content will appear) */
+.content {
+  padding-top: 20px;
+  margin-left: 90px; /* Space for the sidebar */
+}
 .sidebar {
   width: 85px;
   padding-top: 50px;
@@ -147,6 +151,7 @@
   .sidebar {
     width: 70px;
   }
+  
 
   .sidebar-button {
     font-size: 1.5rem;
@@ -233,6 +238,9 @@
     width: 70px; /* Shrink sidebar on smaller screens */
     padding: 10px;
   }
+  .content{
+    margin-left: 90px;
+  }
   .sidebar-button {
     font-size: 1.5rem;
     padding: 10px;
@@ -242,6 +250,9 @@
   .sidebar-button:hover::after {
     font-size: 0.8rem; /* Adjust tooltip size */
   }
+  
+
+
 }
 
 @media (max-width: 480px) {
@@ -264,9 +275,3 @@
 }
 
 
-/* Styling for the content area (where main content will appear) */
-.content {
-  padding: 20px;
-  flex-grow: 1;
-  margin-left: 100px; /* Space for the sidebar */
-}

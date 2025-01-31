@@ -627,10 +627,12 @@ import { FaFileExcel, FaSearch } from "react-icons/fa";
 import "@fontsource/lexend-deca"; // Defaults to weight 400
 import "./styles.css"; // Import the external CSS
 
+
+
 function ItemList() {
   const [items, setItems] = useState([]);
   const [filteredField, setFilteredField] = useState("All");
-  const [currentPage, setCurrentPage] = useState(1); // Current page
+  const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   const itemsPerPage = 5; // Number of items per page
 
@@ -638,12 +640,12 @@ function ItemList() {
     // Fetch leads data from Firebase Realtime Database
     const fetchItems = async () => {
       try {
-        const dbRef = ref(database, "LeadList"); // Reference to the "LeadList" node in Firebase Realtime Database
+        const dbRef = ref(database, "LeadList"); // Reference to the "LeadList" node in Firebase
         const snapshot = await get(dbRef); // Fetch the data
         if (snapshot.exists()) {
           const data = snapshot.val();
           const leadsArray = Object.keys(data).map((key) => ({
-            id: key, // Adding the key to each item to uniquely identify it
+            id: key,
             ...data[key],
           }));
           setItems(leadsArray); // Set the leads data in state
@@ -680,15 +682,10 @@ function ItemList() {
 
   const handleDelete = async (id) => {
     try {
-      // Reference to the specific lead in the Firebase database
-      const itemRef = ref(database, `LeadList/${id}`); // Fixed template literal
-
-      // Remove the item from the database
+      const itemRef = ref(database, `LeadList/${id}`);
       await remove(itemRef);
-
-      // Remove the item locally from the state
       setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-      console.log(`Lead with id: ${id} has been deleted.`); // Fixed string interpolation
+      console.log(`Lead with id: ${id} has been deleted.`);
     } catch (error) {
       console.error("Error deleting lead:", error.message);
     }
@@ -699,7 +696,7 @@ function ItemList() {
   };
 
   const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
+    setSearchTerm(event.target.value); // Update the search term
   };
 
   const headers = {
@@ -724,15 +721,15 @@ function ItemList() {
 
   const selectedHeaders = headers[filteredField] || [];
 
-  // Filter items based on search term
+  // Real-time search filtering
   const filteredItems = items.filter((item) => {
     const lowerSearchTerm = searchTerm.toLowerCase();
-    const itemName = item.name ? item.name.toLowerCase() : ""; 
-    const itemPhone = item.phone ? item.phone.toLowerCase() : ""; 
-    
+    const itemName = item.name ? item.name.toLowerCase() : "";
+    const itemPhone = item.phone ? item.phone.toLowerCase() : "";
+
+    // Match search term with either name or phone
     return itemName.includes(lowerSearchTerm) || itemPhone.includes(lowerSearchTerm);
   });
-  
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -747,51 +744,57 @@ function ItemList() {
 
   return (
     <div className="container">
-      <h2 className="text-center mb-4">Leads</h2>
+      <h2 className="text-center mb-2">Leads</h2>
       {/* Filter and Action Bar */}
-      <div className="action-bar d-flex justify-content-between align-items-center mb-3 p-3 bg-light">
-        <div className="d-flex align-items-center filter-section">
-          <div className="input-group mb-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search Name, Phone"
-              aria-label="Search Name, Phone"
-            />
-            <span className="input-group-text">
-              <FaSearch />
-            </span>
-          </div>
-
-          <div className="dropdown-buttons">
-            <DropdownButton id="dropdown-basic-button" title="Contact Owner" variant="outline-secondary">
-              <Dropdown.Item href="#">Owner 1</Dropdown.Item>
-              <Dropdown.Item href="#">Owner 2</Dropdown.Item>
-              <Dropdown.Item href="#">Owner 3</Dropdown.Item>
-            </DropdownButton>
-            <DropdownButton id="dropdown-basic-button" title="Create Date" variant="outline-secondary">
-              <Dropdown.Item href="#">Today</Dropdown.Item>
-              <Dropdown.Item href="#">This Week</Dropdown.Item>
-              <Dropdown.Item href="#">This Month</Dropdown.Item>
-            </DropdownButton>
-            <DropdownButton id="dropdown-basic-button" title="Last Activity Date" variant="outline-secondary">
-              <Dropdown.Item href="#">Today</Dropdown.Item>
-              <Dropdown.Item href="#">This Week</Dropdown.Item>
-              <Dropdown.Item href="#">This Month</Dropdown.Item>
-            </DropdownButton>
-            <DropdownButton id="dropdown-basic-button" title="Lead Status" variant="outline-secondary">
-              <Dropdown.Item href="#">New</Dropdown.Item>
-              <Dropdown.Item href="#">Contacted</Dropdown.Item>
-              <Dropdown.Item href="#">Qualified</Dropdown.Item>
-            </DropdownButton>
-            <DropdownButton id="dropdown-basic-button" title="Edit" variant="outline-secondary">
-              <Dropdown.Item href="#">Export</Dropdown.Item>
-              <Dropdown.Item href="#">Edit Columns</Dropdown.Item>
-            </DropdownButton>
-          </div>
-        </div>
-      </div>
+      <div className="action-bar d-flex justify-content-between align-items-center">
+  {/* Search Bar (Stays on top in mobile view) */}
   
+
+  {/* Dropdowns (in 2x2 grid on mobile, aligned horizontally on larger screens) */}
+  <div className="dropdown-buttons">
+  <div className="search-section ">
+    <div className="input-group">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Search Name, Phone"
+        aria-label="Search Name, Phone"
+        value={searchTerm} // Bind the value to searchTerm
+        onChange={handleSearchChange} // Trigger search on change
+      />
+      <span className="input-group-text">
+        <FaSearch />
+      </span>
+    </div>
+  </div>
+    <DropdownButton id="dropdown-basic-button" title="Contact Owner" variant="outline-secondary">
+      <Dropdown.Item href="#">Owner 1</Dropdown.Item>
+      <Dropdown.Item href="#">Owner 2</Dropdown.Item>
+      <Dropdown.Item href="#">Owner 3</Dropdown.Item>
+    </DropdownButton>
+    <DropdownButton id="dropdown-basic-button" title="Create Date" variant="outline-secondary">
+      <Dropdown.Item href="#">Today</Dropdown.Item>
+      <Dropdown.Item href="#">This Week</Dropdown.Item>
+      <Dropdown.Item href="#">This Month</Dropdown.Item>
+    </DropdownButton>
+    <DropdownButton id="dropdown-basic-button" title="Last Activity Date" variant="outline-secondary">
+      <Dropdown.Item href="#">Today</Dropdown.Item>
+      <Dropdown.Item href="#">This Week</Dropdown.Item>
+      <Dropdown.Item href="#">This Month</Dropdown.Item>
+    </DropdownButton>
+    <DropdownButton id="dropdown-basic-button" title="Lead Status" variant="outline-secondary">
+      <Dropdown.Item href="#">New</Dropdown.Item>
+      <Dropdown.Item href="#">Contacted</Dropdown.Item>
+      <Dropdown.Item href="#">Qualified</Dropdown.Item>
+    </DropdownButton>
+    <DropdownButton id="dropdown-basic-button" title="Edit" variant="outline-secondary">
+      <Dropdown.Item href="#">Export</Dropdown.Item>
+      <Dropdown.Item href="#">Edit Columns</Dropdown.Item>
+    </DropdownButton>
+  </div>
+</div>
+
+
       <div className="table-container" style={{ overflowX: "auto" }}>
         {filteredItems.length > 0 ? (
           <>
@@ -858,13 +861,13 @@ function ItemList() {
                     {selectedHeaders.includes("Social Media") && (
                       <td>
                         <div className="social-media-icons">
-                          <Button variant="outline-success" size="sm" style={{ padding: "5px" }}>
+                          <Button variant="outline-success" size="sm" style={{ padding: "5px",margin:'5px' }}>
                             <MdOutlineSms />
                           </Button>
-                          <Button variant="outline-success" size="sm" style={{ padding: "5px" }}>
+                          <Button variant="outline-success" size="sm" style={{ padding: "5px",margin:'5px' }}>
                             <FaWhatsappSquare />
                           </Button>
-                          <Button variant="outline-success" size="sm" style={{ padding: "5px" }}>
+                          <Button variant="outline-success" size="sm" style={{ padding: "5px",margin:'5px' }}>
                             <MdAddIcCall />
                           </Button>
                         </div>
@@ -890,7 +893,7 @@ function ItemList() {
             </Pagination>
           </>
         ) : (
-          <p>No items to display</p>
+          <p>No data found</p> // Display message when no items match search
         )}
       </div>
     </div>
@@ -898,3 +901,4 @@ function ItemList() {
 }
 
 export default ItemList;
+

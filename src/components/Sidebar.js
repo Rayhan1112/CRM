@@ -15,7 +15,7 @@ function Sidebar({ setActiveSection, userType }) {
             title="Add Item" // Tooltip text
              variant='outline-success'
           >
-            <FaPlusCircle /> {/* Icon for "Add Item" */}
+            <FaPlusCircle size={20} /> {/* Icon for "Add Item" */}
           </Button>
           <Button
             onClick={() => setActiveSection('orders')}
@@ -23,7 +23,7 @@ function Sidebar({ setActiveSection, userType }) {
             title="Orders" // Tooltip text 
             variant='outline-success'
           >
-            <FaBox /> {/* Icon for "Orders" */}
+            <FaBox  size={20} /> {/* Icon for "Orders" */}
           </Button>
           <Button
             onClick={() => setActiveSection('listItems')}
@@ -31,7 +31,7 @@ function Sidebar({ setActiveSection, userType }) {
             title="List Items" // Tooltip text
              variant='outline-success'
           >
-            <FaListAlt /> {/* Icon for "List Items" */}
+            <FaListAlt  size={20} /> {/* Icon for "List Items" */}
           </Button>
           <Button
             onClick={() => setActiveSection('agentlead')}
@@ -39,7 +39,7 @@ function Sidebar({ setActiveSection, userType }) {
             title="Agent Lead" // Tooltip text
              variant='outline-success'
           >
-            <FaUserTie /> {/* Icon for "Agent Lead" */}
+            <FaUserTie  size={20} /> {/* Icon for "Agent Lead" */}
           </Button>
           <Button
             onClick={() => setActiveSection('agentleadlist')}
@@ -47,7 +47,7 @@ function Sidebar({ setActiveSection, userType }) {
             title="Agent Lead List" // Tooltip text
              variant='outline-success'
           >
-            <FaListAlt /> {/* Icon for "Agent Lead List" */}
+            <FaListAlt  size={20} /> {/* Icon for "Agent Lead List" */}
           </Button>
         </>
       )}

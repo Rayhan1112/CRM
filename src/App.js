@@ -142,7 +142,7 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div>
     
       {/* Include the InternetConnectionError component */}
       <InternetConnectionError />
