@@ -1,8 +1,13 @@
 /* General container styling */
 .container {
+<<<<<<< HEAD
   margin: 20px;
   padding: 10px;
   margin-left: 40px;
+=======
+  
+  margin-left: -40px;
+>>>>>>> 9b22a1c4f683085079b31175bcadbbd00ae1e4b5
 }
 
 /* Base Styling for Action Bar */
@@ -20,6 +25,13 @@
   gap: 15px;
   justify-content: flex-start; /* Aligns items to the left */
   align-items: center;
+<<<<<<< HEAD
+=======
+  margin-bottom: 20px;
+ 
+  background-color: #f8f9fa;
+  flex-wrap: wrap; /* Ensures items wrap on smaller screens */
+>>>>>>> 9b22a1c4f683085079b31175bcadbbd00ae1e4b5
 }
 
 /* Input group styling */
@@ -51,6 +63,7 @@
 
 /* Mobile view (max-width: 768px) */
 @media (max-width: 768px) {
+<<<<<<< HEAD
   .action-bar {
     flex-direction: column; /* Stack elements vertically */
   }
@@ -60,6 +73,49 @@
   }
   #dropdown-basic-button{
     display: none;
+=======
+
+  .container {
+    width: 100%;
+   
+   
+
+  }
+ 
+
+  /* Other styles remain unchanged */
+  .action-bar {
+    flex-direction: column;
+    gap: 15px;
+  width: auto;
+   margin-left: -30px;
+    
+  }
+  .table-container{
+    width: auto;
+    margin-left: -30px;
+  }
+
+  .dropdown-buttons {
+    display:flex ; /* Align dropdowns horizontally */
+    justify-content: space-between; /* Space dropdowns evenly */
+    flex-wrap: nowrap; /* Ensure dropdowns stay in one row */
+    gap: 10px; /* Add spacing between dropdowns */
+    flex-direction:column;
+  }
+
+  .dropdown-buttons .dropdown-button {
+    
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .input-group {
+    order: -1; /* Moves the search bar to the top */
+    width: 100%; /* Full width of the container */
+    max-width: 100%;
+    margin-bottom: 15px; /* Space below the search bar */
+>>>>>>> 9b22a1c4f683085079b31175bcadbbd00ae1e4b5
   }
   .input-group{
     width: auto;
@@ -68,8 +124,18 @@
 
 
 @media (max-width: 576px) {
-  .container{
-    margin-left: -40px;
+  
+  .action-bar {
+    flex-direction: column;
+    gap: 15px;
+   padding: 0%;
+   width: 360px;
+   margin-left: -30px;
+    
+  }
+  .table-container{
+    width: 360px;
+    margin-left: -30px;
   }
   .input-group .form-control {
     padding: 10px 15px;

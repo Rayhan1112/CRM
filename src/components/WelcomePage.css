@@ -75,6 +75,7 @@
 /* Media Queries for Responsiveness */
 /* Large Screens (Desktops) */
 @media (min-width: 1200px) {
+  
   .welcome-main {
     padding: 90px;
   }
@@ -95,6 +96,9 @@
 
 /* Medium Screens (Tablets) */
 @media (max-width: 1199px) and (min-width: 769px) {
+  .welcome-page{
+    margin-left: -60px;
+  }
   .welcome-main {
     padding: 60px;
   }
@@ -115,6 +119,9 @@
 
 /* Small Screens (Large Smartphones) */
 @media (max-width: 768px) and (min-width: 481px) {
+  .welcome-page{
+    margin-left: -60px;
+  }
   .welcome-main {
     padding: 50px;
     border-radius: 25px;
@@ -136,6 +143,9 @@
 
 /* Extra-Small Screens (Small Smartphones) */
 @media (max-width: 480px) {
+  .welcome-page{
+    margin-left: -60px;
+  }
   .welcome-main {
     padding: 40px;
     border-radius: 20px;
