@@ -475,75 +475,78 @@ function ItemForm({ onAddItem }) {
 
       {showPopup && importedData.length > 0 && (
           <>
-            <div style={overlayStyle} onClick={closePopup}></div>
-            <div style={popupStyle}>
-              <h3 style={{ textAlign: "center" }}>Imported Excel Data</h3>
-              <table style={{ width: "100%", borderCollapse: "collapse" }}>
-                <thead>
-                  <tr>
-                    {Object.keys(importedData[0]).map((key) => (
-                      <th
-                        key={key}
-                        style={{
-                          border: "1px solid #ddd",
-                          padding: "8px",
-                          backgroundColor: "#f2f2f2",
-                        }}
-                      >
-                        {key}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {importedData.map((row, index) => (
-                    <tr key={index}>
-                      {Object.values(row).map((value, idx) => (
-                        <td
-                          key={idx}
-                          style={{
-                            border: "1px solid #ddd",
-                            padding: "8px",
-                          }}
-                        >
-                          {value}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button
+          <div style={overlayStyle} onClick={closePopup}></div>
+<div style={{ ...popupStyle, maxHeight: "70vh", overflowY: "auto" }}>
+  <h3 style={{ textAlign: "center" }}>Imported Excel Data</h3>
+  <div style={{ maxHeight: "50vh", overflowY: "auto" }}> {/* Scrollable area */}
+    <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <thead>
+        <tr>
+          {Object.keys(importedData[0]).map((key) => (
+            <th
+              key={key}
+              style={{
+                border: "1px solid #ddd",
+                padding: "8px",
+                backgroundColor: "#f2f2f2",
+              }}
+            >
+              {key}
+            </th>
+          ))}
+        </tr>
+      </thead>
+      <tbody>
+        {importedData.map((row, index) => (
+          <tr key={index}>
+            {Object.values(row).map((value, idx) => (
+              <td
+                key={idx}
                 style={{
-                  marginTop: "20px",
-                  padding: "10px 20px",
-                  backgroundColor: "#007bff",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
+                  border: "1px solid #ddd",
+                  padding: "8px",
                 }}
-                onClick={handleBulkSubmit}
-                disabled={loading}
               >
-                {loading ? "Submitting..." : "Submit Excel Data"}
-              </button>
-              <button
-                style={{
-                  marginTop: "20px",
-                  padding: "10px 20px",
-                  backgroundColor: "red",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  marginLeft: "10px",
-                }}
-                onClick={closePopup}
-              >
-                Cancel
-              </button>
-            </div>
+                {value}
+              </td>
+            ))}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+  <button
+    style={{
+      marginTop: "20px",
+      padding: "10px 20px",
+      backgroundColor: "#007bff",
+      color: "white",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+    }}
+    onClick={handleBulkSubmit}
+    disabled={loading}
+  >
+    {loading ? "Submitting..." : "Submit Excel Data"}
+  </button>
+  <button
+    style={{
+      marginTop: "20px",
+      padding: "10px 20px",
+      backgroundColor: "red",
+      color: "white",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      marginLeft: "10px",
+    }}
+    onClick={closePopup}
+  >
+    Cancel
+  </button>
+</div>
+
           </>
         )}
       </div>
