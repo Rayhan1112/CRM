@@ -1,7 +1,7 @@
 /* Styling for the content area (where main content will appear) */
 .content {
-  padding-top: 20px;
-  margin-left: 90px; /* Space for the sidebar */
+  padding-top: 10px;
+  padding-left: 130px; /* Space for the sidebar */
 }
 .sidebar {
   width: 85px;
@@ -239,7 +239,8 @@
     padding: 10px;
   }
   .content{
-    margin-left: 90px;
+    margin-left: 10px;
+    padding-top: -2vh;
   }
   .sidebar-button {
     font-size: 1.5rem;

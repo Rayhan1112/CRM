@@ -55,12 +55,13 @@ function Sidebar({ setActiveSection, userType }) {
       {/* Agent-specific button for Orders */}
       {userType === 'agent' && (
         <Button
-          onClick={() => setActiveSection('orders')}
+          onClick={() => setActiveSection('assigned')}
           className="sidebar-button"
           title="Orders" // Tooltip text
         >
           <FaBox /> {/* Icon for "Orders" */}
         </Button>
+       
       )}
     </div>
   );

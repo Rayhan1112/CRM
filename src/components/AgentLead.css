@@ -113,7 +113,6 @@
     display: flex;
     justify-content: space-between;
     gap: 30px;
-    flex-wrap: wrap; /* Ensures elements wrap in smaller screens */
     }
   
   .form-container {
@@ -209,6 +208,8 @@
   @media (max-width: 768px) {
     .agent-lead-container {
       flex-direction: column;
+      margin-left: -12vh;
+  
     }
   
     .form-container, .preview-container {

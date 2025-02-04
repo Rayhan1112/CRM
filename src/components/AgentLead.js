@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { getDatabase, ref, push } from "firebase/database";
+import { getDatabase, ref,set, push } from "firebase/database";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import database from '../firebaseConfig'; // Adjust the path if necessary
@@ -20,12 +20,24 @@ function AgentLead() {
     setFormData({ ...formData, [name]: value });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const dbRef = ref(database, 'AgentList'); // Reference to 'AgentList' root
-      await push(dbRef, formData); // Push data to Firebase
+      const newAgentRef = push(dbRef); // Generate a new reference with a unique push ID
+      const pushId = newAgentRef.key; // Get the push ID
+  
+      // Add the push ID to the form data
+      const agentData = {
+        ...formData,
+        id: pushId, // Store the push ID in the data
+      };
+  
+      // Push data to Firebase
+      await set(newAgentRef, agentData); // Use `set` instead of `push` to explicitly set the data
+  
       alert('Agent lead added successfully!');
       setFormData({ id: '', name: '', email: '', password: '', agentLead: 'Active', assignedLeads: '' }); // Reset form
     } catch (error) {

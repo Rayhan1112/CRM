@@ -12,6 +12,7 @@ const SignIn = ({ onSignIn }) => {
   const [error, setError] = useState('');
   const [userType, setUserType] = useState('client');
   const [agents, setAgents] = useState([]); // State to hold agent data
+  const [AgentId,setAgentId] = useState(null);
 
   // Fetch agent data from Firebase
   useEffect(() => {
@@ -38,27 +39,30 @@ const SignIn = ({ onSignIn }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+  
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-
+  
     if (userType === 'agent') {
       // Check if the email and password match an agent's credentials from Firebase
       const agent = agents.find(
         (agent) => agent.email === trimmedEmail && agent.password === trimmedPassword
       );
-
+  
       if (agent) {
         // Check if the agent's status is 'active'
         if (agent.agentLead === 'Active') {
+          setAgentId(agent.id);
           // If the agent is active, proceed to sign in
-          onSignIn('agent'); // Trigger sign-in for active agent
+          onSignIn(userType, email,agent.id); // Trigger sign-in for active agent          
+          // Show agent's pushId and assigned Leads in the alert
           Swal.fire({
             title: 'Success!',
-            text: 'Signed in as Agent!',
+            text: `Signed in as Agent!\nPushId: ${agent.id}\nAssigned Leads: ${agent.assignedLeads ? agent.assignedLeads : 'No leads assigned'}`,
             icon: 'success',
             confirmButtonText: 'Ok'
           });
+  
           setError('');
           setEmail('');
           setPassword('');
@@ -83,6 +87,7 @@ const SignIn = ({ onSignIn }) => {
       }
     }
   };
+  
 
   return (
     <div className="signin-page">
@@ -139,7 +144,3 @@ const SignIn = ({ onSignIn }) => {
 };
 
 export default SignIn;
-
-
-
-

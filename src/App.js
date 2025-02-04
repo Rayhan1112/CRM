@@ -84,6 +84,7 @@ import AgentLead from './components/AgentLead';
 import AgentLeadList from './components/AgentLeadList';
 import WelcomePage from './components/WelcomePage'
 import InternetConnectionError from './components/InternetConnectionError';
+import Assigned from './components/AssignedLeads/AssignedLeads';
 
 import './App.css';
 
@@ -95,15 +96,17 @@ function App() {
   const [userType, setUserType] = useState(null);  
   const [activeSection, setActiveSection] = useState("welcome"); 
   const [items, setItems] = useState([]);
+  const [id,setid] = useState(null);
 
   const addItem = (item) => {
     setItems([...items, item]);
   };
 
-  const handleSignIn = (type) => {
+  const handleSignIn = (type,email,id) => {
     setIsAuthenticated(true);
     setUserType(type);
     setActiveSection("welcome");
+    setid(id)
   };
 
   const handleSignOut = () => {
@@ -136,6 +139,8 @@ function App() {
         return <AgentLead />;
       case "agentleadlist":
         return <AgentLeadList />;
+      case "assigned":
+          return <Assigned agentId={id} />;
       default:
         return <div>Select an option from the sidebar.</div>;
     }
