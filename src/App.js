@@ -96,17 +96,19 @@ function App() {
   const [userType, setUserType] = useState(null);  
   const [activeSection, setActiveSection] = useState("welcome"); 
   const [items, setItems] = useState([]);
-  const [id,setid] = useState(null);
+  const [id,setId] = useState(null)
+  const[assigned,setAssigned]=useState();
 
   const addItem = (item) => {
     setItems([...items, item]);
   };
 
-  const handleSignIn = (type,email,id) => {
+  const handleSignIn = (type,email,id,assignedLeads) => {
     setIsAuthenticated(true);
     setUserType(type);
-    setActiveSection("welcome");
-    setid(id)
+    setId(id);
+    setAssigned(assignedLeads)
+    setActiveSection("welcome");   
   };
 
   const handleSignOut = () => {
@@ -140,7 +142,7 @@ function App() {
       case "agentleadlist":
         return <AgentLeadList />;
       case "assigned":
-          return <Assigned agentId={id} />;
+          return <Assigned agentId={id} numberOfLeadsToShow={assigned} />;
       default:
         return <div>Select an option from the sidebar.</div>;
     }

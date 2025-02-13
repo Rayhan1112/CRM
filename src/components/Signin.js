@@ -1,10 +1,9 @@
-
-
 import React, { useState, useEffect } from 'react';
 import './SignIn.css';
 import { getDatabase, ref, get } from 'firebase/database'; // Import get along with other methods
 import database from '../firebaseConfig'; // Firebase configuration
 import Swal from 'sweetalert2';
+import AgentLeadList from './AssignedLeads/AssignedLeads';
 
 const SignIn = ({ onSignIn }) => {
   const [email, setEmail] = useState('');
@@ -12,7 +11,6 @@ const SignIn = ({ onSignIn }) => {
   const [error, setError] = useState('');
   const [userType, setUserType] = useState('client');
   const [agents, setAgents] = useState([]); // State to hold agent data
-  const [AgentId,setAgentId] = useState(null);
 
   // Fetch agent data from Firebase
   useEffect(() => {
@@ -39,22 +37,21 @@ const SignIn = ({ onSignIn }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
-  
+
     if (userType === 'agent') {
       // Check if the email and password match an agent's credentials from Firebase
       const agent = agents.find(
         (agent) => agent.email === trimmedEmail && agent.password === trimmedPassword
       );
-  
+
       if (agent) {
         // Check if the agent's status is 'active'
         if (agent.agentLead === 'Active') {
-          setAgentId(agent.id);
           // If the agent is active, proceed to sign in
-          onSignIn(userType, email,agent.id); // Trigger sign-in for active agent          
+          onSignIn(userType, trimmedEmail, agent.id,agent.assignedLeads); // Pass userType, email, and agentId to onSignIn
           // Show agent's pushId and assigned Leads in the alert
           Swal.fire({
             title: 'Success!',
@@ -62,7 +59,8 @@ const SignIn = ({ onSignIn }) => {
             icon: 'success',
             confirmButtonText: 'Ok'
           });
-  
+          // <AgentLeadList agentId={agent.assignedLeads} />
+
           setError('');
           setEmail('');
           setPassword('');
@@ -77,7 +75,7 @@ const SignIn = ({ onSignIn }) => {
     } else {
       // Default credentials for admin
       if (trimmedEmail === 'admin@1.com' && trimmedPassword === '123') {
-        onSignIn('admin');
+        onSignIn('admin', trimmedEmail); // Pass userType and email to onSignIn
         alert('Signed in as Admin!');
         setError('');
         setEmail('');
@@ -87,7 +85,6 @@ const SignIn = ({ onSignIn }) => {
       }
     }
   };
-  
 
   return (
     <div className="signin-page">
