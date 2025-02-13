@@ -15,7 +15,6 @@ function ItemList() {
     totalLeads: 0,
   });
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -23,10 +22,22 @@ function ItemList() {
         const snapshot = await get(dbRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const leadsArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
+          const leadsArray = Object.keys(data).map((key) => {
+            // Decrypt the data using atob
+            return {
+              id: key,
+              name: atob(data[key].name),
+              phone: atob(data[key].phone),
+              email: atob(data[key].email),
+              vehicleModel: atob(data[key].vehicleModel),
+              regNumber: atob(data[key].regNumber),
+              policyStart: atob(data[key].policyStart),
+              policyExpiry: atob(data[key].policyExpiry),
+              currentProvider: atob(data[key].currentProvider),
+              premium: atob(data[key].premium),
+              leadStatus: atob(data[key].leadStatus),
+            };
+          });
           setItems(leadsArray);
           calculateLeadCounts(leadsArray);
         } else {
@@ -36,9 +47,10 @@ function ItemList() {
         console.error("Error fetching items: ", error.message);
       }
     };
-
+  
     fetchItems();
   }, []);
+  
 
   const calculateLeadCounts = (leads) => {
     const counts = {

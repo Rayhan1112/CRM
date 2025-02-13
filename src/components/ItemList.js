@@ -26,20 +26,30 @@ function ItemList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   const itemsPerPage = 5; // Number of items per page
-
   useEffect(() => {
-    // Fetch leads data from Firebase Realtime Database
     const fetchItems = async () => {
       try {
-        const dbRef = ref(database, "LeadList"); // Reference to the "LeadList" node in Firebase
-        const snapshot = await get(dbRef); // Fetch the data
+        const dbRef = ref(database, "LeadList");
+        const snapshot = await get(dbRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const leadsArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setItems(leadsArray); // Set the leads data in state
+          const leadsArray = Object.keys(data).map((key) => {
+            // Decrypt the data using atob
+            return {
+              id: key,
+              name: atob(data[key].name),
+              phone: atob(data[key].phone),
+              email: atob(data[key].email),
+              vehicleModel: atob(data[key].vehicleModel),
+              regNumber: atob(data[key].regNumber),
+              policyStart: atob(data[key].policyStart),
+              policyExpiry: atob(data[key].policyExpiry),
+              currentProvider: atob(data[key].currentProvider),
+              premium: atob(data[key].premium),
+              leadStatus: atob(data[key].leadStatus),
+            };
+          });
+          setItems(leadsArray);
         } else {
           console.log("No leads available.");
         }
@@ -47,9 +57,10 @@ function ItemList() {
         console.error("Error fetching leads: ", error.message);
       }
     };
-
+  
     fetchItems();
   }, []);
+  
 
   const exportToExcel = () => {
     const formattedData = items.map((item) => ({

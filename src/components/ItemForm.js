@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import { getDatabase, ref, push, set } from "firebase/database";
 import * as XLSX from "xlsx";
-import database from "../firebaseConfig"; // Assuming you have exported the Firebase instance in this file
+import database from "../firebaseConfig";
 import Swal from 'sweetalert2';
+import CryptoJS from 'crypto-js';
+import { SECRET_KEY } from "../config"; // Import the secret key
+const encryptData = (data) => {
+  return CryptoJS.AES.encrypt(JSON.stringify(data), SECRET_KEY).toString();
+};
 
-function ItemForm({ onAddItem }) {
+
+
+function ItemForm() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +25,6 @@ function ItemForm({ onAddItem }) {
   const [importedData, setImportedData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
-
   const formStyle = {
     fontFamily: 'Lexend Deca ',
     fontWeight: 900,
@@ -208,47 +214,6 @@ function ItemForm({ onAddItem }) {
       reader.readAsBinaryString(file);
     }
   };
-
-  const handleBulkSubmit = async () => {
-    setLoading(true);
-
-    if (importedData.length === 0) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'No data to submit. Please upload a valid file first.',
-        icon: 'error',
-        confirmButtonText: 'Ok'
-      });
-      setLoading(false);
-      return;
-    }
-
-    try {
-      const db = getDatabase();
-      const leadsRef = ref(db, "LeadList");
-
-      importedData.forEach((lead) => {
-        const sanitizedLead = sanitizeKeys(lead);
-        const newLeadRef = push(leadsRef);
-        set(newLeadRef, sanitizedLead);
-      });
-
-      setImportedData([]);
-      setShowPopup(false);
-      Swal.fire({
-        title: 'Success!',
-        text: 'Data Submitted Successfully',
-        icon: 'success',
-        confirmButtonText: 'Ok'
-      });
-    } catch (error) {
-      console.error("Error submitting data: ", error);
-      alert("An error occurred while submitting data. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -270,7 +235,10 @@ function ItemForm({ onAddItem }) {
       const db = getDatabase();
       const leadsRef = ref(db, "LeadList");
       const newLeadRef = push(leadsRef);
-      await set(newLeadRef, sanitizeKeys(leadData)); // Sanitize keys before submission
+
+      // Encrypt the data before sending
+      const encryptedData = encryptData(sanitizeKeys(leadData));
+      await set(newLeadRef, { encryptedData });
 
       Swal.fire({
         title: 'Success!',
@@ -278,6 +246,8 @@ function ItemForm({ onAddItem }) {
         icon: 'success',
         confirmButtonText: 'Ok'
       });
+
+      // Clear the form
       setName("");
       setPhone("");
       setEmail("");
@@ -291,6 +261,48 @@ function ItemForm({ onAddItem }) {
     } catch (error) {
       console.error("Error submitting lead: ", error);
       alert("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Bulk Submission
+  const handleBulkSubmit = async () => {
+    setLoading(true);
+
+    if (importedData.length === 0) {
+      Swal.fire({
+        title: 'Error!',
+        text: 'No data to submit. Please upload a valid file first.',
+        icon: 'error',
+        confirmButtonText: 'Ok'
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const db = getDatabase();
+      const leadsRef = ref(db, "LeadList");
+
+      importedData.forEach((lead) => {
+        const sanitizedLead = sanitizeKeys(lead);
+        const encryptedLead = encryptData(sanitizedLead);
+        const newLeadRef = push(leadsRef);
+        set(newLeadRef, { encryptedLead });
+      });
+
+      setImportedData([]);
+      setShowPopup(false);
+      Swal.fire({
+        title: 'Success!',
+        text: 'Data Submitted Successfully',
+        icon: 'success',
+        confirmButtonText: 'Ok'
+      });
+    } catch (error) {
+      console.error("Error submitting data: ", error);
+      alert("An error occurred while submitting data. Please try again.");
     } finally {
       setLoading(false);
     }
