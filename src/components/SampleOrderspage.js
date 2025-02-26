@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { ref, get, update } from "firebase/database"; // Import Firebase Realtime Database methods
+import { ref, get, update, getDatabase } from "firebase/database"; // Import Firebase Realtime Database methods
 import database from "../firebaseConfig"; // Import the Firebase config
 import Table from "react-bootstrap/Table";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./ItemList.css"; // Import CSS
 import SummaryOrders from "./SummaryOrders";
+import CryptoJS from 'crypto-js'
+const ENCRYPTION_KEY = 'PTW2025'; // Encryption key
+
 
 function ItemList() {
   const [items, setItems] = useState([]);
@@ -16,27 +19,52 @@ function ItemList() {
   });
   const [loading, setLoading] = useState(false);
 
+  // Function to decrypt data
+  const decryptData = (encryptedData) => {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+      const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+  
+      if (!decryptedString) {
+        throw new Error("Decryption failed: Invalid encrypted data or key.");
+      }
+  
+      return JSON.parse(decryptedString);
+    } catch (error) {
+      console.error("Decryption error:", error.message);
+      return null; // Return null if decryption fails
+    }
+  };
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const dbRef = ref(database, "LeadList");
+        const db = getDatabase();
+        const dbRef = ref(db, "LeadList");
         const snapshot = await get(dbRef);
+  
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const leadsArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setItems(leadsArray);
-          calculateLeadCounts(leadsArray);
+          const leadsArray = Object.keys(data).map((key) => {
+            const encryptedData = data[key]; // Encrypted data from Firebase
+            console.log("Encrypted Data:", encryptedData); // Log encrypted data
+  
+            const decryptedData = decryptData(encryptedData); // Decrypt the data
+            console.log("Decrypted Data:", decryptedData); // Log decrypted data
+  
+            return {
+              id: key,
+              ...decryptedData, // Spread decrypted data into the object
+            };
+          });
+          setItems(leadsArray); // Set the decrypted leads data in state
         } else {
           console.log("No leads available.");
         }
       } catch (error) {
-        console.error("Error fetching items: ", error.message);
+        console.error("Error fetching leads: ", error.message);
       }
     };
-
+  
     fetchItems();
   }, []);
 

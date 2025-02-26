@@ -3,6 +3,8 @@ import { getDatabase, ref, push, set } from "firebase/database";
 import * as XLSX from "xlsx";
 import database from "../firebaseConfig"; // Assuming you have exported the Firebase instance in this file
 import Swal from 'sweetalert2';
+import CryptoJS from 'crypto-js';
+
 
 function ItemForm({ onAddItem }) {
   const [name, setName] = useState("");
@@ -18,6 +20,8 @@ function ItemForm({ onAddItem }) {
   const [importedData, setImportedData] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
+  const ENCRYPTION_KEY = 'PTW2025';
+
 
   const formStyle = {
     fontFamily: 'Lexend Deca ',
@@ -147,6 +151,11 @@ function ItemForm({ onAddItem }) {
     zIndex: 999,
   };
 
+  // Function to encrypt data
+const encryptData = (data) => {
+  return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
+};
+
   const sanitizeKeys = (data) => {
     const keyMapping = {
       "Name": "name",                 // Mapping for name
@@ -211,7 +220,7 @@ function ItemForm({ onAddItem }) {
 
   const handleBulkSubmit = async () => {
     setLoading(true);
-
+  
     if (importedData.length === 0) {
       Swal.fire({
         title: 'Error!',
@@ -222,19 +231,21 @@ function ItemForm({ onAddItem }) {
       setLoading(false);
       return;
     }
-
+  
     try {
       const db = getDatabase();
       const leadsRef = ref(db, "LeadList");
-
+  
+      // Encrypt and submit each lead
       importedData.forEach((lead) => {
-        const sanitizedLead = sanitizeKeys(lead);
+        const sanitizedLead = sanitizeKeys(lead); // Sanitize the lead data
+        const encryptedLead = encryptData(sanitizedLead); // Encrypt the sanitized lead
         const newLeadRef = push(leadsRef);
-        set(newLeadRef, sanitizedLead);
+        set(newLeadRef, encryptedLead); // Store the encrypted lead in Firebase
       });
-
-      setImportedData([]);
-      setShowPopup(false);
+  
+      setImportedData([]); // Clear the imported data
+      setShowPopup(false); // Close the popup
       Swal.fire({
         title: 'Success!',
         text: 'Data Submitted Successfully',
@@ -252,7 +263,7 @@ function ItemForm({ onAddItem }) {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
+  
     const leadData = {
       name,
       phone,
@@ -265,19 +276,24 @@ function ItemForm({ onAddItem }) {
       premium,
       leadStatus,
     };
-
+  
     try {
       const db = getDatabase();
       const leadsRef = ref(db, "LeadList");
       const newLeadRef = push(leadsRef);
-      await set(newLeadRef, sanitizeKeys(leadData)); // Sanitize keys before submission
-
+  
+      // Encrypt the lead data before submission
+      const encryptedData = encryptData(leadData);
+      await set(newLeadRef, encryptedData);
+  
       Swal.fire({
         title: 'Success!',
         text: 'Lead Added',
         icon: 'success',
         confirmButtonText: 'Ok'
       });
+  
+      // Reset form fields
       setName("");
       setPhone("");
       setEmail("");

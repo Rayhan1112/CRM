@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { ref, get, remove } from "firebase/database"; // Import Firebase Realtime Database methods
+import { ref, get, remove,getDatabase } from "firebase/database"; // Import Firebase Realtime Database methods
 import database from "../firebaseConfig"; // Firebase configuration file
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
@@ -17,6 +17,7 @@ import { MdAssignmentAdd, MdEditSquare, MdOutlineCreateNewFolder } from "react-i
 import { FaFileExcel, FaSearch } from "react-icons/fa";
 import "@fontsource/lexend-deca"; // Defaults to weight 400
 import "./styles.css"; // Import the external CSS
+import CryptoJS from 'crypto-js'
 
 
 
@@ -27,19 +28,46 @@ function ItemList() {
   const [searchTerm, setSearchTerm] = useState(""); // State for search term
   const itemsPerPage = 5; // Number of items per page
 
+  const ENCRYPTION_KEY = 'PTW2025'; // Encryption key
+
+  // Function to decrypt data
+  const decryptData = (encryptedData) => {
+    try {
+      const bytes = CryptoJS.AES.decrypt(encryptedData, ENCRYPTION_KEY);
+      const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
+  
+      if (!decryptedString) {
+        throw new Error("Decryption failed: Invalid encrypted data or key.");
+      }
+  
+      return JSON.parse(decryptedString);
+    } catch (error) {
+      console.error("Decryption error:", error.message);
+      return null; // Return null if decryption fails
+    }
+  };
   useEffect(() => {
-    // Fetch leads data from Firebase Realtime Database
     const fetchItems = async () => {
       try {
-        const dbRef = ref(database, "LeadList"); // Reference to the "LeadList" node in Firebase
-        const snapshot = await get(dbRef); // Fetch the data
+        const db = getDatabase();
+        const dbRef = ref(db, "LeadList");
+        const snapshot = await get(dbRef);
+  
         if (snapshot.exists()) {
           const data = snapshot.val();
-          const leadsArray = Object.keys(data).map((key) => ({
-            id: key,
-            ...data[key],
-          }));
-          setItems(leadsArray); // Set the leads data in state
+          const leadsArray = Object.keys(data).map((key) => {
+            const encryptedData = data[key]; // Encrypted data from Firebase
+            console.log("Encrypted Data:", encryptedData); // Log encrypted data
+  
+            const decryptedData = decryptData(encryptedData); // Decrypt the data
+            console.log("Decrypted Data:", decryptedData); // Log decrypted data
+  
+            return {
+              id: key,
+              ...decryptedData, // Spread decrypted data into the object
+            };
+          });
+          setItems(leadsArray); // Set the decrypted leads data in state
         } else {
           console.log("No leads available.");
         }
@@ -47,10 +75,9 @@ function ItemList() {
         console.error("Error fetching leads: ", error.message);
       }
     };
-
+  
     fetchItems();
   }, []);
-
   const exportToExcel = () => {
     const formattedData = items.map((item) => ({
       Name: item.name,
